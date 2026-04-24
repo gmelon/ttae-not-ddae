@@ -1,17 +1,21 @@
+import AppKit
 import CoreGraphics
 import Foundation
 import TtaeCore
 
-public final class InputMonitor {
+final class InputMonitor {
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
 
-    public init() {}
+    var isEnabled: () -> Bool = { true }
+    var exceptionWords: () -> Set<String> = { [] }
+    var onCorrection: (Character, Character) -> Void = { _, _ in }
 
     @discardableResult
-    public func start() -> Bool {
+    func start() -> Bool {
+        guard eventTap == nil else { return true }
         let mask = CGEventMask(1 << CGEventType.keyDown.rawValue)
-        let selfPointer = Unmanaged.passUnretained(self).toOpaque()
+        let pointer = Unmanaged.passUnretained(self).toOpaque()
 
         guard let tap = CGEvent.tapCreate(
             tap: .cgSessionEventTap,
@@ -23,7 +27,7 @@ public final class InputMonitor {
                 let monitor = Unmanaged<InputMonitor>.fromOpaque(userInfo).takeUnretainedValue()
                 return monitor.handle(type: type, event: event)
             },
-            userInfo: selfPointer
+            userInfo: pointer
         ) else {
             return false
         }
@@ -36,17 +40,29 @@ public final class InputMonitor {
         return true
     }
 
+    func stop() {
+        if let source = runLoopSource {
+            CFRunLoopRemoveSource(CFRunLoopGetCurrent(), source, .commonModes)
+        }
+        eventTap = nil
+        runLoopSource = nil
+    }
+
     private func handle(type: CGEventType, event: CGEvent) -> Unmanaged<CGEvent> {
-        guard type == .keyDown else {
+        guard isEnabled(), type == .keyDown else {
             return Unmanaged.passUnretained(event)
         }
 
         let typed = characters(from: event)
+        let exceptions = exceptionWords()
+
         for character in typed {
+            guard !exceptions.contains(String(character)) else { continue }
             if let corrected = CorrectionRules.correctedSyllable(for: character) {
-                FileHandle.standardOutput.write(Data("[!] 감지: \(character) → \(corrected)\n".utf8))
+                onCorrection(character, corrected)
             }
         }
+
         return Unmanaged.passUnretained(event)
     }
 

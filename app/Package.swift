@@ -2,21 +2,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "Ttae",
+    name: "TtaeCore",
     platforms: [.macOS(.v13)],
     products: [
-        .executable(name: "ttae", targets: ["TtaeApp"]),
         .library(name: "TtaeCore", targets: ["TtaeCore"]),
     ],
     targets: [
         .target(
             name: "TtaeCore",
             path: "Sources/TtaeCore"
-        ),
-        .executableTarget(
-            name: "TtaeApp",
-            dependencies: ["TtaeCore"],
-            path: "Sources/TtaeApp"
         ),
         .testTarget(
             name: "TtaeCoreTests",

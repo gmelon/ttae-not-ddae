@@ -1,0 +1,397 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2147CA4CDA42BE5D021BEEC0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AF100CC87751A7517D846D /* AppState.swift */; };
+		33C81DC7F85468B70578D727 /* GeneralTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2662253D8614AF15D7ABEDC2 /* GeneralTab.swift */; };
+		3D4E5F62E4C72056976309DB /* AccessibilityPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CACE1D1FC520968A63059D1 /* AccessibilityPermission.swift */; };
+		463B91C4F1C18C2BD0AA7EE3 /* TtaeCore in Frameworks */ = {isa = PBXBuildFile; productRef = 966CAFD29C8A50114E49F350 /* TtaeCore */; };
+		9A61D7C11D81AF35F20A3068 /* TtaeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB21DE6E59566EDCCBC3C70 /* TtaeApp.swift */; };
+		B09BE26208D428AA8D4D1ADD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806FC0231253CBEC074FC210 /* SettingsView.swift */; };
+		B5C93C9A9592DD8F04E86C8F /* InputMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33856B2BCC10A37C429F09C1 /* InputMonitor.swift */; };
+		CF41678463BC7B5CBAD599C9 /* AboutTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 194AA7B5E7A04E47D6D4A4D5 /* AboutTab.swift */; };
+		D48AE30E47D4475DD5A248A4 /* ExceptionsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB6F29DA7E4D24F2662BB35 /* ExceptionsTab.swift */; };
+		ED89657B39559050DD6323EB /* MenuBarContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F1258B8FF0D05F18659FBBB /* MenuBarContent.swift */; };
+		F64C7F9F758A18E8F8A90A53 /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0D2BF52632AEAF1327A432 /* LaunchAtLogin.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		07F1B299AAB3FB2C7E699CFA /* Ttae.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ttae.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		194AA7B5E7A04E47D6D4A4D5 /* AboutTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutTab.swift; sourceTree = "<group>"; };
+		1F1258B8FF0D05F18659FBBB /* MenuBarContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarContent.swift; sourceTree = "<group>"; };
+		2662253D8614AF15D7ABEDC2 /* GeneralTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTab.swift; sourceTree = "<group>"; };
+		2CACE1D1FC520968A63059D1 /* AccessibilityPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityPermission.swift; sourceTree = "<group>"; };
+		33856B2BCC10A37C429F09C1 /* InputMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMonitor.swift; sourceTree = "<group>"; };
+		5F369E3F1691DCAD71B0AA1D /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = .; sourceTree = SOURCE_ROOT; };
+		6BB6F29DA7E4D24F2662BB35 /* ExceptionsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExceptionsTab.swift; sourceTree = "<group>"; };
+		76AF100CC87751A7517D846D /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		7B95277A5581668BA3F4576C /* Ttae.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Ttae.entitlements; sourceTree = "<group>"; };
+		7C0D2BF52632AEAF1327A432 /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
+		806FC0231253CBEC074FC210 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		8BB21DE6E59566EDCCBC3C70 /* TtaeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TtaeApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		175FD600A61CF5E4D4B98DAF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				463B91C4F1C18C2BD0AA7EE3 /* TtaeCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		05AE4298ECC9EC9517772850 /* Ttae */ = {
+			isa = PBXGroup;
+			children = (
+				2CACE1D1FC520968A63059D1 /* AccessibilityPermission.swift */,
+				76AF100CC87751A7517D846D /* AppState.swift */,
+				33856B2BCC10A37C429F09C1 /* InputMonitor.swift */,
+				7C0D2BF52632AEAF1327A432 /* LaunchAtLogin.swift */,
+				7B95277A5581668BA3F4576C /* Ttae.entitlements */,
+				8BB21DE6E59566EDCCBC3C70 /* TtaeApp.swift */,
+				747AAD51DF48EFF77295F312 /* MenuBar */,
+				6F274A2AA69EEFB552F02467 /* Settings */,
+			);
+			path = Ttae;
+			sourceTree = "<group>";
+		};
+		60DCE40FAAAA977019DE2BB6 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				5F369E3F1691DCAD71B0AA1D /* app */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		6F274A2AA69EEFB552F02467 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				194AA7B5E7A04E47D6D4A4D5 /* AboutTab.swift */,
+				6BB6F29DA7E4D24F2662BB35 /* ExceptionsTab.swift */,
+				2662253D8614AF15D7ABEDC2 /* GeneralTab.swift */,
+				806FC0231253CBEC074FC210 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		747AAD51DF48EFF77295F312 /* MenuBar */ = {
+			isa = PBXGroup;
+			children = (
+				1F1258B8FF0D05F18659FBBB /* MenuBarContent.swift */,
+			);
+			path = MenuBar;
+			sourceTree = "<group>";
+		};
+		A91162F7C5170F74BFBA4A7A = {
+			isa = PBXGroup;
+			children = (
+				60DCE40FAAAA977019DE2BB6 /* Packages */,
+				05AE4298ECC9EC9517772850 /* Ttae */,
+				B4DB6036D1ECA8CDBDE808EF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		B4DB6036D1ECA8CDBDE808EF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				07F1B299AAB3FB2C7E699CFA /* Ttae.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CE4104444B0020498236479F /* Ttae */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5C5FFD80142E8510B48E79F7 /* Build configuration list for PBXNativeTarget "Ttae" */;
+			buildPhases = (
+				C476AAE365C8072FE0D69FE5 /* Sources */,
+				175FD600A61CF5E4D4B98DAF /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Ttae;
+			packageProductDependencies = (
+				966CAFD29C8A50114E49F350 /* TtaeCore */,
+			);
+			productName = Ttae;
+			productReference = 07F1B299AAB3FB2C7E699CFA /* Ttae.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A60D0F12DCBD312C1914F4A7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					CE4104444B0020498236479F = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 4A903F377BE641B60D009DCC /* Build configuration list for PBXProject "Ttae" */;
+			developmentRegion = ko;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				ko,
+			);
+			mainGroup = A91162F7C5170F74BFBA4A7A;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				AC1F386D8C6FC24AB1037C3B /* XCLocalSwiftPackageReference "." */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B4DB6036D1ECA8CDBDE808EF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CE4104444B0020498236479F /* Ttae */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C476AAE365C8072FE0D69FE5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CF41678463BC7B5CBAD599C9 /* AboutTab.swift in Sources */,
+				3D4E5F62E4C72056976309DB /* AccessibilityPermission.swift in Sources */,
+				2147CA4CDA42BE5D021BEEC0 /* AppState.swift in Sources */,
+				D48AE30E47D4475DD5A248A4 /* ExceptionsTab.swift in Sources */,
+				33C81DC7F85468B70578D727 /* GeneralTab.swift in Sources */,
+				B5C93C9A9592DD8F04E86C8F /* InputMonitor.swift in Sources */,
+				F64C7F9F758A18E8F8A90A53 /* LaunchAtLogin.swift in Sources */,
+				ED89657B39559050DD6323EB /* MenuBarContent.swift in Sources */,
+				B09BE26208D428AA8D4D1ADD /* SettingsView.swift in Sources */,
+				9A61D7C11D81AF35F20A3068 /* TtaeApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		04F93E5BB50D6762CB32C76D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_ENTITLEMENTS = Ttae/Ttae.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "떄가아니라때";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 떄가아니라때";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.gmelon.ttae;
+				PRODUCT_NAME = Ttae;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		55A2DCD0AB73A9D7814A8501 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		9C5384EE7E7D9C19BCFE8294 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_ENTITLEMENTS = Ttae/Ttae.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "떄가아니라때";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 떄가아니라때";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.gmelon.ttae;
+				PRODUCT_NAME = Ttae;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DC1075A4B871745C37405C30 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4A903F377BE641B60D009DCC /* Build configuration list for PBXProject "Ttae" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55A2DCD0AB73A9D7814A8501 /* Debug */,
+				DC1075A4B871745C37405C30 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5C5FFD80142E8510B48E79F7 /* Build configuration list for PBXNativeTarget "Ttae" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9C5384EE7E7D9C19BCFE8294 /* Debug */,
+				04F93E5BB50D6762CB32C76D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		AC1F386D8C6FC24AB1037C3B /* XCLocalSwiftPackageReference "." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = .;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		966CAFD29C8A50114E49F350 /* TtaeCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TtaeCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = A60D0F12DCBD312C1914F4A7 /* Project object */;
+}

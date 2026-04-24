@@ -8,10 +8,11 @@
 
 ### 상태
 
-초기 구현 중입니다. 현재 마일스톤 M1 (핵심 로직 PoC) 완료.
+초기 구현 중입니다. 현재 마일스톤 M2 (앱 UI 셸) 완료.
 
-- M1 완료: 한글 음절 분해/합성 유틸, Tier 1 교정 룰, CGEventTap 기반 키 이벤트 감시 PoC
-- M2 진행 예정: MenuBarExtra + Settings 창 + on/off / 예외 단어 UI
+- M1 완료: 한글 음절 분해/합성 유틸(TtaeCore), Tier 1 교정 룰, CGEventTap 기반 입력 감지 PoC
+- M2 완료: Xcode 앱 프로젝트, MenuBarExtra, 설정 창(일반·예외 단어·정보), 로그인 시 자동 실행(SMAppService), Accessibility 권한 플로우
+- M3 진행 예정: 실제 backspace + 재입력 교정, IME 조합 상태 처리, 배포 파이프라인(Developer ID 서명 + 공증)
 
 ### 예정된 주요 기능
 
@@ -22,16 +23,24 @@
 
 ### 개발 / 실행
 
-빌드와 테스트는 `app/` 디렉터리에서 Swift Package Manager 로 동작합니다.
+프로젝트 루트는 `app/` 입니다. 앱은 Xcode 에서 열고, 핵심 로직은 SwiftPM 으로 단독 테스트 가능합니다.
 
 ```sh
 cd app
-swift build            # TtaeCore + ttae 실행 파일 빌드
-swift test             # 단위 테스트 실행
-swift run ttae         # 이벤트 탭 PoC 실행 (Accessibility 권한 필요)
+
+# 앱 빌드/실행
+open Ttae.xcodeproj                 # Xcode 에서 Run
+
+# 또는 CLI 빌드
+xcodebuild -project Ttae.xcodeproj -scheme Ttae -configuration Debug build
+
+# 핵심 로직 단위 테스트 (TtaeCore)
+swift test
 ```
 
-최초 PoC 실행 시 해당 터미널/Xcode 에 "시스템 설정 > 개인 정보 보호 및 보안 > 손쉬운 사용" 권한이 필요합니다.
+`Ttae.xcodeproj` 는 `project.yml` 로부터 [XcodeGen](https://github.com/yonaskolb/XcodeGen) 으로 생성되며 리포에 함께 커밋됩니다. 구조적 변경(파일 추가, 빌드 설정 등)은 `project.yml` 수정 후 `xcodegen generate` 로 반영합니다. 단순한 파일 편집은 Xcode 에서 직접 해도 됩니다.
+
+최초 실행 시 "시스템 설정 > 개인 정보 보호 및 보안 > 손쉬운 사용" 에서 떄가아니라때에 권한을 부여해야 합니다. 앱 내 설정 화면에서 해당 설정을 바로 열 수 있습니다.
 
 ### 라이선스
 
