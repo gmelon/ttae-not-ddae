@@ -8,7 +8,10 @@
 
 ### 상태
 
-현재 초기 기획 단계입니다. 상세 계획은 [docs/PLAN.md](docs/PLAN.md) 를 참고하세요.
+초기 구현 중입니다. 현재 마일스톤 M1 (핵심 로직 PoC) 완료.
+
+- M1 완료: 한글 음절 분해/합성 유틸, Tier 1 교정 룰, CGEventTap 기반 키 이벤트 감시 PoC
+- M2 진행 예정: MenuBarExtra + Settings 창 + on/off / 예외 단어 UI
 
 ### 예정된 주요 기능
 
@@ -16,6 +19,19 @@
 - 메뉴바 상주형 앱, 설정 창 하나의 간결한 구성
 - 교정 on/off 토글 및 예외 단어 관리
 - 로그인 시 자동 실행
+
+### 개발 / 실행
+
+빌드와 테스트는 `app/` 디렉터리에서 Swift Package Manager 로 동작합니다.
+
+```sh
+cd app
+swift build            # TtaeCore + ttae 실행 파일 빌드
+swift test             # 단위 테스트 실행
+swift run ttae         # 이벤트 탭 PoC 실행 (Accessibility 권한 필요)
+```
+
+최초 PoC 실행 시 해당 터미널/Xcode 에 "시스템 설정 > 개인 정보 보호 및 보안 > 손쉬운 사용" 권한이 필요합니다.
 
 ### 라이선스
 
