@@ -2,6 +2,7 @@ import SwiftUI
 
 @main
 struct TtaeApp: App {
+    @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
     @StateObject private var state = AppState()
 
     var body: some Scene {

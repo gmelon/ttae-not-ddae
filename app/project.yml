@@ -32,7 +32,7 @@ targets:
         INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026 떄가아니라때"
         ENABLE_HARDENED_RUNTIME: YES
         COMBINE_HIDPI_IMAGES: YES
-        ASSETCATALOG_COMPILER_APPICON_NAME: ""
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     dependencies:
       - package: TtaeCore
         product: TtaeCore

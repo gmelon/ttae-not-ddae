@@ -13,6 +13,7 @@
 		463B91C4F1C18C2BD0AA7EE3 /* TtaeCore in Frameworks */ = {isa = PBXBuildFile; productRef = 966CAFD29C8A50114E49F350 /* TtaeCore */; };
 		5BAE84BA955116D74ED87F11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DB72CE6934D2198E84839A8 /* Assets.xcassets */; };
 		7113EFB402E2FD0099333ED5 /* MageIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701D69A471010FAABD506864 /* MageIcon.swift */; };
+		8C2E446E903A598A8B8BFE79 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE54B87EBF40BC368DE80DD6 /* AppDelegate.swift */; };
 		9A61D7C11D81AF35F20A3068 /* TtaeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB21DE6E59566EDCCBC3C70 /* TtaeApp.swift */; };
 		B09BE26208D428AA8D4D1ADD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806FC0231253CBEC074FC210 /* SettingsView.swift */; };
 		B5C93C9A9592DD8F04E86C8F /* InputMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33856B2BCC10A37C429F09C1 /* InputMonitor.swift */; };
@@ -38,6 +39,7 @@
 		806FC0231253CBEC074FC210 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8BB21DE6E59566EDCCBC3C70 /* TtaeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TtaeApp.swift; sourceTree = "<group>"; };
 		8DB72CE6934D2198E84839A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DE54B87EBF40BC368DE80DD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				2CACE1D1FC520968A63059D1 /* AccessibilityPermission.swift */,
+				DE54B87EBF40BC368DE80DD6 /* AppDelegate.swift */,
 				76AF100CC87751A7517D846D /* AppState.swift */,
 				8DB72CE6934D2198E84839A8 /* Assets.xcassets */,
 				33856B2BCC10A37C429F09C1 /* InputMonitor.swift */,
@@ -191,6 +194,7 @@
 			files = (
 				CF41678463BC7B5CBAD599C9 /* AboutTab.swift in Sources */,
 				3D4E5F62E4C72056976309DB /* AccessibilityPermission.swift in Sources */,
+				8C2E446E903A598A8B8BFE79 /* AppDelegate.swift in Sources */,
 				2147CA4CDA42BE5D021BEEC0 /* AppState.swift in Sources */,
 				D48AE30E47D4475DD5A248A4 /* ExceptionsTab.swift in Sources */,
 				33C81DC7F85468B70578D727 /* GeneralTab.swift in Sources */,
@@ -209,7 +213,7 @@
 		04F93E5BB50D6762CB32C76D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Ttae/Ttae.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -297,7 +301,7 @@
 		9C5384EE7E7D9C19BCFE8294 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Ttae/Ttae.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
