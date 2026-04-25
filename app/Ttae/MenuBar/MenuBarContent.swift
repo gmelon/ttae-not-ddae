@@ -35,14 +35,27 @@ struct MenuBarPopover: View {
 
     private var header: some View {
         HStack(spacing: 0) {
-            Text("떄가아니라때")
-                .font(.system(size: 13, weight: .medium))
+            wordmark
             Spacer()
             statusDot
         }
         .padding(.horizontal, 14)
         .padding(.top, 12)
         .padding(.bottom, 6)
+    }
+
+    private var wordmark: some View {
+        HStack(spacing: 0) {
+            Text("떄")
+                .strikethrough(true, color: .red.opacity(0.7))
+                .foregroundStyle(.tertiary)
+            Text(" 가 아니라 ")
+                .foregroundStyle(.secondary)
+            Text("때")
+                .foregroundStyle(.primary)
+                .fontWeight(.semibold)
+        }
+        .font(.system(size: 13, weight: .medium))
     }
 
     private var statusDot: some View {
@@ -100,7 +113,7 @@ struct MenuBarPopover: View {
 
             Divider().frame(height: 16).opacity(0.5)
 
-            footerButton(title: "종료", icon: "power", shortcut: "q") {
+            footerButton(title: "종료", icon: "logout", shortcut: "q") {
                 NSApp.terminate(nil)
             }
             .frame(maxWidth: .infinity)

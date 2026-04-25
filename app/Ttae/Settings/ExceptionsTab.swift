@@ -21,9 +21,10 @@ struct ExceptionsTab: View {
         VStack(alignment: .leading, spacing: 4) {
             Text("예외 단어")
                 .font(.headline)
-            Text("이 단어들은 교정하지 않습니다. 슬랭, 고유명사, 브랜드명 등을 추가하세요.")
+            Text("교정에서 제외할 단어를 등록합니다. 사람 이름, 브랜드명, 자주 쓰는 신조어처럼 사전에 없어도 그대로 두고 싶은 표현을 추가하세요.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
