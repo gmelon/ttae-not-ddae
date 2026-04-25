@@ -8,7 +8,7 @@ options:
 settings:
   base:
     CURRENT_PROJECT_VERSION: 1
-    MARKETING_VERSION: "0.1.0"
+    MARKETING_VERSION: "1.0.0"
     SWIFT_VERSION: "5.9"
 packages:
   TtaeCore:
@@ -32,7 +32,7 @@ targets:
         INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026 떄가아니라때"
         ENABLE_HARDENED_RUNTIME: YES
         COMBINE_HIDPI_IMAGES: YES
-        ASSETCATALOG_COMPILER_APPICON_NAME: ""
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     dependencies:
       - package: TtaeCore
         product: TtaeCore

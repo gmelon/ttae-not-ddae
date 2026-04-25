@@ -5,34 +5,66 @@ struct AboutTab: View {
     private let licenseURL = URL(string: "https://github.com/gmelon/ttae-not-ddae/blob/main/LICENSE")!
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 0) {
             Spacer()
-
-            Text("떄가아니라때")
-                .font(.largeTitle)
-                .bold()
-
+            wordmark
+                .padding(.bottom, 14)
             Text("세상에 '떄' 라는 말은 없다.")
-                .font(.title3)
+                .font(.callout)
                 .foregroundStyle(.secondary)
-
-            let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
-            let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?"
-            Text("버전 \(version) (\(build))")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-
-            Divider()
-                .padding(.horizontal, 60)
-
-            VStack(spacing: 8) {
-                Link("GitHub 리포지토리", destination: githubURL)
-                Link("오픈소스 라이선스 (MIT)", destination: licenseURL)
-            }
-
+                .padding(.bottom, 26)
+            versionBlock
             Spacer()
+            links
+            Spacer().frame(height: 8)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding()
+        .padding(.horizontal, 24)
+        .padding(.vertical, 18)
+    }
+
+    private var wordmark: some View {
+        HStack(spacing: 0) {
+            Text("떄")
+                .strikethrough(true, color: .red.opacity(0.7))
+                .foregroundStyle(.tertiary)
+            Text(" 가 아니라 ")
+                .foregroundStyle(.secondary)
+            Text("때")
+                .foregroundStyle(.primary)
+                .fontWeight(.semibold)
+        }
+        .font(.system(size: 32, weight: .medium))
+    }
+
+    private var versionBlock: some View {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "?"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "?"
+        return VStack(spacing: 2) {
+            Text("버전 \(version)")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+            Text("빌드 \(build)")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+        }
+    }
+
+    private var links: some View {
+        VStack(spacing: 8) {
+            Link(destination: githubURL) {
+                HStack(spacing: 6) {
+                    MageIcon("link", size: 14)
+                    Text("GitHub 리포지토리")
+                }
+            }
+            Link(destination: licenseURL) {
+                HStack(spacing: 6) {
+                    MageIcon("file", size: 14)
+                    Text("오픈소스 라이선스 (MIT)")
+                }
+            }
+        }
+        .font(.callout)
     }
 }

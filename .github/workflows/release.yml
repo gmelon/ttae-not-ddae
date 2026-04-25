@@ -1,0 +1,240 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build, sign, notarize, release
+    runs-on: macos-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Resolve version from project.yml
+        id: version
+        working-directory: .
+        run: |
+          set -euo pipefail
+          PROJECT_YML="app/project.yml"
+          if [ ! -f "$PROJECT_YML" ]; then
+            echo "::error::$PROJECT_YML not found."
+            exit 1
+          fi
+          VERSION=$(grep -E '^[[:space:]]*MARKETING_VERSION:' "$PROJECT_YML" \
+            | head -1 \
+            | sed -E 's/.*"([^"]+)".*/\1/')
+          if [ -z "$VERSION" ]; then
+            echo "::error::Could not parse MARKETING_VERSION from $PROJECT_YML."
+            exit 1
+          fi
+          TAG="v$VERSION"
+          DMG="Ttae-$VERSION.dmg"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG"         >> "$GITHUB_OUTPUT"
+          echo "dmg=$DMG"         >> "$GITHUB_OUTPUT"
+
+          if git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "::notice::Tag $TAG already exists. Bump MARKETING_VERSION in app/project.yml to publish a new release. Skipping release steps."
+            echo "skip=true"  >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: SwiftPM unit tests
+        if: steps.version.outputs.skip == 'false'
+        run: swift test
+
+      - name: Import Developer ID certificate
+        if: steps.version.outputs.skip == 'false'
+        env:
+          P12_BASE64: ${{ secrets.DEVELOPER_ID_CERTIFICATE_P12 }}
+          P12_PASSWORD: ${{ secrets.DEVELOPER_ID_CERTIFICATE_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+        working-directory: .
+        run: |
+          set -euo pipefail
+          KEYCHAIN_PATH="$RUNNER_TEMP/build.keychain-db"
+
+          echo -n "$P12_BASE64" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+
+          security import "$RUNNER_TEMP/cert.p12" \
+            -P "$P12_PASSWORD" \
+            -A -t cert -f pkcs12 \
+            -k "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH" login.keychain
+          security set-key-partition-list \
+            -S apple-tool:,apple: \
+            -s -k "$KEYCHAIN_PASSWORD" \
+            "$KEYCHAIN_PATH"
+
+          rm "$RUNNER_TEMP/cert.p12"
+
+          TEAM_ID=$(security find-identity -v -p codesigning "$KEYCHAIN_PATH" \
+            | grep "Developer ID Application" \
+            | head -1 \
+            | sed -E 's/.*\(([A-Z0-9]{10})\).*/\1/')
+          if [ -z "$TEAM_ID" ]; then
+            echo "::error::Failed to extract Team ID from Developer ID Application certificate."
+            security find-identity -v -p codesigning "$KEYCHAIN_PATH" || true
+            exit 1
+          fi
+          echo "TEAM_ID=$TEAM_ID" >> "$GITHUB_ENV"
+          echo "KEYCHAIN_PATH=$KEYCHAIN_PATH" >> "$GITHUB_ENV"
+          echo "Resolved Team ID: $TEAM_ID"
+
+      - name: Archive
+        if: steps.version.outputs.skip == 'false'
+        run: |
+          set -euo pipefail
+          xcodebuild archive \
+            -project Ttae.xcodeproj \
+            -scheme Ttae \
+            -configuration Release \
+            -destination 'generic/platform=macOS' \
+            -archivePath "$RUNNER_TEMP/Ttae.xcarchive" \
+            DEVELOPMENT_TEAM="$TEAM_ID" \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Developer ID Application" \
+            OTHER_CODE_SIGN_FLAGS="--timestamp --options=runtime" \
+            MARKETING_VERSION="${{ steps.version.outputs.version }}" \
+            CURRENT_PROJECT_VERSION="${{ github.run_number }}"
+
+      - name: Export signed .app
+        if: steps.version.outputs.skip == 'false'
+        working-directory: .
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/exportOptions.plist" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>developer-id</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>teamID</key>
+            <string>$TEAM_ID</string>
+          </dict>
+          </plist>
+          EOF
+
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/Ttae.xcarchive" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -exportOptionsPlist "$RUNNER_TEMP/exportOptions.plist"
+
+      - name: Create DMG
+        if: steps.version.outputs.skip == 'false'
+        working-directory: .
+        run: |
+          set -euo pipefail
+          brew install create-dmg
+
+          DMG_PATH="$RUNNER_TEMP/${{ steps.version.outputs.dmg }}"
+          create-dmg \
+            --volname "떄가아니라때 ${{ steps.version.outputs.version }}" \
+            --window-pos 200 120 \
+            --window-size 600 320 \
+            --icon-size 128 \
+            --icon "Ttae.app" 175 120 \
+            --hide-extension "Ttae.app" \
+            --app-drop-link 425 120 \
+            "$DMG_PATH" \
+            "$RUNNER_TEMP/export/Ttae.app"
+
+          echo "DMG_PATH=$DMG_PATH" >> "$GITHUB_ENV"
+
+      - name: Notarize and staple
+        if: steps.version.outputs.skip == 'false'
+        env:
+          KEY_P8_BASE64: ${{ secrets.APP_STORE_CONNECT_KEY_P8 }}
+          KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        working-directory: .
+        run: |
+          set -euo pipefail
+          AUTH_KEY="$RUNNER_TEMP/AuthKey.p8"
+          echo -n "$KEY_P8_BASE64" | base64 --decode > "$AUTH_KEY"
+
+          xcrun notarytool submit "$DMG_PATH" \
+            --key "$AUTH_KEY" \
+            --key-id "$KEY_ID" \
+            --issuer "$ISSUER_ID" \
+            --wait
+
+          xcrun stapler staple "$DMG_PATH"
+
+          rm "$AUTH_KEY"
+
+      - name: Verify signature and notarization
+        if: steps.version.outputs.skip == 'false'
+        working-directory: .
+        run: |
+          codesign --verify --deep --strict --verbose=2 "$RUNNER_TEMP/export/Ttae.app"
+          spctl --assess --type execute --verbose=4 "$RUNNER_TEMP/export/Ttae.app" || true
+          stapler validate "$DMG_PATH"
+
+      - name: Compute SHA-256
+        if: steps.version.outputs.skip == 'false'
+        working-directory: .
+        run: |
+          set -euo pipefail
+          shasum -a 256 "$DMG_PATH" | awk '{print $1"  "$NF}' > "$DMG_PATH.sha256"
+          cat "$DMG_PATH.sha256"
+          echo "DMG_SHA_PATH=$DMG_PATH.sha256" >> "$GITHUB_ENV"
+
+      - name: Cleanup keychain
+        if: always() && env.KEYCHAIN_PATH != ''
+        working-directory: .
+        run: |
+          security delete-keychain "$KEYCHAIN_PATH" || true
+
+      - name: Tag the release commit
+        if: steps.version.outputs.skip == 'false'
+        working-directory: .
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ steps.version.outputs.tag }}" -m "Release ${{ steps.version.outputs.tag }}"
+          git push origin "${{ steps.version.outputs.tag }}"
+
+      - name: Create GitHub Release
+        if: steps.version.outputs.skip == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+          generate_release_notes: true
+          files: |
+            ${{ env.DMG_PATH }}
+            ${{ env.DMG_SHA_PATH }}
+          body: |
+            ## 떄가아니라때 ${{ steps.version.outputs.tag }}
+
+            세상에 떄 라는 말은 없다.
+
+            ### 설치
+
+            1. 아래 `Ttae-${{ steps.version.outputs.version }}.dmg` 다운로드
+            2. 더블클릭으로 마운트, `Ttae.app` 을 Applications 폴더에 드래그
+            3. 처음 실행 시 시스템 설정 > 개인 정보 보호 및 보안 > 손쉬운 사용 에서 권한 부여

@@ -2,23 +2,26 @@ import SwiftUI
 
 @main
 struct TtaeApp: App {
-    @StateObject private var state = AppState()
+    @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
+    @State private var state = AppState()
 
     var body: some Scene {
-        MenuBarExtra {
-            MenuBarContent()
-                .environmentObject(state)
+        @Bindable var state = state
+
+        MenuBarExtra(isInserted: $state.menuBarIconVisible) {
+            MenuBarPopover()
+                .environment(state)
         } label: {
-            Image(systemName: state.correctionEnabled
-                  ? "character.bubble.fill"
-                  : "character.bubble")
+            Image("Logo")
+                .renderingMode(.template)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
         }
-        .menuBarExtraStyle(.menu)
+        .menuBarExtraStyle(.window)
 
         Settings {
             SettingsView()
-                .environmentObject(state)
-                .frame(width: 520, height: 440)
+                .environment(state)
+                .frame(width: 540, height: 460)
         }
     }
 }

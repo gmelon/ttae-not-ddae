@@ -1,43 +1,59 @@
 import Foundation
+import Observation
 import SwiftUI
 
 @MainActor
-final class AppState: ObservableObject {
-    @Published var correctionEnabled: Bool {
+@Observable
+final class AppState {
+    var correctionEnabled: Bool {
         didSet {
             UserDefaults.standard.set(correctionEnabled, forKey: Key.enabled)
-            updateMonitor()
+            DispatchQueue.main.async { [weak self] in
+                self?.updateMonitor()
+            }
         }
     }
 
-    @Published var launchAtLogin: Bool {
+    var launchAtLogin: Bool {
         didSet {
             UserDefaults.standard.set(launchAtLogin, forKey: Key.launchAtLogin)
-            LaunchAtLogin.setEnabled(launchAtLogin)
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                LaunchAtLogin.setEnabled(self.launchAtLogin)
+            }
         }
     }
 
-    @Published var exceptionWords: [String] {
+    var exceptionWords: [String] {
         didSet { UserDefaults.standard.set(exceptionWords, forKey: Key.exceptionWords) }
     }
 
-    @Published private(set) var correctionCount: Int {
+    var menuBarIconVisible: Bool {
+        didSet { UserDefaults.standard.set(menuBarIconVisible, forKey: Key.menuBarIconVisible) }
+    }
+
+    private(set) var correctionCount: Int {
         didSet { UserDefaults.standard.set(correctionCount, forKey: Key.count) }
     }
 
-    @Published private(set) var isMonitoring = false
+    private(set) var hasAccessibilityPermission: Bool
 
-    var hasAccessibilityPermission: Bool {
-        AccessibilityPermission.isTrusted()
+    /// 모니터링 상태는 다른 두 값으로부터 파생되는 computed.
+    var isMonitoring: Bool {
+        correctionEnabled && hasAccessibilityPermission
     }
 
+    @ObservationIgnored
     private let monitor = InputMonitor()
+    @ObservationIgnored
+    private var permissionWatcher: Timer?
 
     private enum Key {
         static let enabled = "correctionEnabled"
         static let launchAtLogin = "launchAtLogin"
         static let exceptionWords = "exceptionWords"
         static let count = "correctionCount"
+        static let menuBarIconVisible = "menuBarIconVisible"
     }
 
     init() {
@@ -45,20 +61,32 @@ final class AppState: ObservableObject {
         if defaults.object(forKey: Key.enabled) == nil {
             defaults.set(true, forKey: Key.enabled)
         }
+        if defaults.object(forKey: Key.menuBarIconVisible) == nil {
+            defaults.set(true, forKey: Key.menuBarIconVisible)
+        }
         self.correctionEnabled = defaults.bool(forKey: Key.enabled)
         self.launchAtLogin = LaunchAtLogin.isEnabled
         self.exceptionWords = defaults.stringArray(forKey: Key.exceptionWords) ?? []
+        self.menuBarIconVisible = defaults.bool(forKey: Key.menuBarIconVisible)
         self.correctionCount = defaults.integer(forKey: Key.count)
+        self.hasAccessibilityPermission = AccessibilityPermission.isTrusted()
 
         monitor.isEnabled = { [weak self] in self?.correctionEnabled ?? false }
         monitor.exceptionWords = { [weak self] in Set(self?.exceptionWords ?? []) }
         monitor.onCorrection = { [weak self] _, _ in
-            Task { @MainActor in
+            DispatchQueue.main.async {
                 self?.correctionCount += 1
             }
         }
 
-        updateMonitor()
+        DispatchQueue.main.async { [weak self] in
+            self?.updateMonitor()
+        }
+        startPermissionWatcher()
+    }
+
+    deinit {
+        permissionWatcher?.invalidate()
     }
 
     func addExceptionWord(_ word: String) {
@@ -77,15 +105,29 @@ final class AppState: ObservableObject {
 
     func requestAccessibility() {
         AccessibilityPermission.prompt()
-        objectWillChange.send()
+    }
+
+    private func startPermissionWatcher() {
+        permissionWatcher = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            DispatchQueue.main.async { self?.tickPermissionWatcher() }
+        }
+    }
+
+    private func tickPermissionWatcher() {
+        let trusted = AccessibilityPermission.isTrusted()
+        if trusted != hasAccessibilityPermission {
+            hasAccessibilityPermission = trusted
+        }
+        if correctionEnabled, trusted {
+            updateMonitor()
+        }
     }
 
     private func updateMonitor() {
         if correctionEnabled {
-            isMonitoring = monitor.start()
+            _ = monitor.start()
         } else {
             monitor.stop()
-            isMonitoring = false
         }
     }
 }

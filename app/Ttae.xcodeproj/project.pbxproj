@@ -11,6 +11,9 @@
 		33C81DC7F85468B70578D727 /* GeneralTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2662253D8614AF15D7ABEDC2 /* GeneralTab.swift */; };
 		3D4E5F62E4C72056976309DB /* AccessibilityPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CACE1D1FC520968A63059D1 /* AccessibilityPermission.swift */; };
 		463B91C4F1C18C2BD0AA7EE3 /* TtaeCore in Frameworks */ = {isa = PBXBuildFile; productRef = 966CAFD29C8A50114E49F350 /* TtaeCore */; };
+		5BAE84BA955116D74ED87F11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DB72CE6934D2198E84839A8 /* Assets.xcassets */; };
+		7113EFB402E2FD0099333ED5 /* MageIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701D69A471010FAABD506864 /* MageIcon.swift */; };
+		8C2E446E903A598A8B8BFE79 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE54B87EBF40BC368DE80DD6 /* AppDelegate.swift */; };
 		9A61D7C11D81AF35F20A3068 /* TtaeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB21DE6E59566EDCCBC3C70 /* TtaeApp.swift */; };
 		B09BE26208D428AA8D4D1ADD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806FC0231253CBEC074FC210 /* SettingsView.swift */; };
 		B5C93C9A9592DD8F04E86C8F /* InputMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33856B2BCC10A37C429F09C1 /* InputMonitor.swift */; };
@@ -29,11 +32,14 @@
 		33856B2BCC10A37C429F09C1 /* InputMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMonitor.swift; sourceTree = "<group>"; };
 		5F369E3F1691DCAD71B0AA1D /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = .; sourceTree = SOURCE_ROOT; };
 		6BB6F29DA7E4D24F2662BB35 /* ExceptionsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExceptionsTab.swift; sourceTree = "<group>"; };
+		701D69A471010FAABD506864 /* MageIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageIcon.swift; sourceTree = "<group>"; };
 		76AF100CC87751A7517D846D /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		7B95277A5581668BA3F4576C /* Ttae.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Ttae.entitlements; sourceTree = "<group>"; };
 		7C0D2BF52632AEAF1327A432 /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
 		806FC0231253CBEC074FC210 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8BB21DE6E59566EDCCBC3C70 /* TtaeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TtaeApp.swift; sourceTree = "<group>"; };
+		8DB72CE6934D2198E84839A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DE54B87EBF40BC368DE80DD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,9 +58,12 @@
 			isa = PBXGroup;
 			children = (
 				2CACE1D1FC520968A63059D1 /* AccessibilityPermission.swift */,
+				DE54B87EBF40BC368DE80DD6 /* AppDelegate.swift */,
 				76AF100CC87751A7517D846D /* AppState.swift */,
+				8DB72CE6934D2198E84839A8 /* Assets.xcassets */,
 				33856B2BCC10A37C429F09C1 /* InputMonitor.swift */,
 				7C0D2BF52632AEAF1327A432 /* LaunchAtLogin.swift */,
+				701D69A471010FAABD506864 /* MageIcon.swift */,
 				7B95277A5581668BA3F4576C /* Ttae.entitlements */,
 				8BB21DE6E59566EDCCBC3C70 /* TtaeApp.swift */,
 				747AAD51DF48EFF77295F312 /* MenuBar */,
@@ -115,6 +124,7 @@
 			buildConfigurationList = 5C5FFD80142E8510B48E79F7 /* Build configuration list for PBXNativeTarget "Ttae" */;
 			buildPhases = (
 				C476AAE365C8072FE0D69FE5 /* Sources */,
+				BD4BD8A91D5B41586DD74347 /* Resources */,
 				175FD600A61CF5E4D4B98DAF /* Frameworks */,
 			);
 			buildRules = (
@@ -166,6 +176,17 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		BD4BD8A91D5B41586DD74347 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BAE84BA955116D74ED87F11 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C476AAE365C8072FE0D69FE5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -173,11 +194,13 @@
 			files = (
 				CF41678463BC7B5CBAD599C9 /* AboutTab.swift in Sources */,
 				3D4E5F62E4C72056976309DB /* AccessibilityPermission.swift in Sources */,
+				8C2E446E903A598A8B8BFE79 /* AppDelegate.swift in Sources */,
 				2147CA4CDA42BE5D021BEEC0 /* AppState.swift in Sources */,
 				D48AE30E47D4475DD5A248A4 /* ExceptionsTab.swift in Sources */,
 				33C81DC7F85468B70578D727 /* GeneralTab.swift in Sources */,
 				B5C93C9A9592DD8F04E86C8F /* InputMonitor.swift in Sources */,
 				F64C7F9F758A18E8F8A90A53 /* LaunchAtLogin.swift in Sources */,
+				7113EFB402E2FD0099333ED5 /* MageIcon.swift in Sources */,
 				ED89657B39559050DD6323EB /* MenuBarContent.swift in Sources */,
 				B09BE26208D428AA8D4D1ADD /* SettingsView.swift in Sources */,
 				9A61D7C11D81AF35F20A3068 /* TtaeApp.swift in Sources */,
@@ -190,7 +213,7 @@
 		04F93E5BB50D6762CB32C76D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Ttae/Ttae.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -263,7 +286,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -278,7 +301,7 @@
 		9C5384EE7E7D9C19BCFE8294 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Ttae/Ttae.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -345,7 +368,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
