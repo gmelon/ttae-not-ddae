@@ -6,14 +6,22 @@ final class AppState: ObservableObject {
     @Published var correctionEnabled: Bool {
         didSet {
             UserDefaults.standard.set(correctionEnabled, forKey: Key.enabled)
-            updateMonitor()
+            // didSet 내부에서 동기적으로 다른 publish/heavy work 를 하면 SwiftUI 의 view update
+            // 사이클 안에서 변화가 발생해 'Publishing changes from within view updates' 경고가 뜨므로
+            // 무거운 side effect 는 항상 다음 runloop tick 으로 미룬다.
+            DispatchQueue.main.async { [weak self] in
+                self?.updateMonitor()
+            }
         }
     }
 
     @Published var launchAtLogin: Bool {
         didSet {
             UserDefaults.standard.set(launchAtLogin, forKey: Key.launchAtLogin)
-            LaunchAtLogin.setEnabled(launchAtLogin)
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                LaunchAtLogin.setEnabled(self.launchAtLogin)
+            }
         }
     }
 
@@ -31,8 +39,7 @@ final class AppState: ObservableObject {
 
     @Published private(set) var hasAccessibilityPermission: Bool
 
-    /// 모니터링 활성 여부는 별도의 @Published 가 아니라 다른 두 @Published 로부터 파생되는 computed.
-    /// @Published 끼리의 didSet 체인을 끊어서 SwiftUI 의 "Publishing changes from within view updates" 경고를 방지한다.
+    /// 모니터링 상태는 다른 두 @Published 로부터 파생되는 computed.
     var isMonitoring: Bool {
         correctionEnabled && hasAccessibilityPermission
     }
@@ -65,13 +72,18 @@ final class AppState: ObservableObject {
 
         monitor.isEnabled = { [weak self] in self?.correctionEnabled ?? false }
         monitor.exceptionWords = { [weak self] in Set(self?.exceptionWords ?? []) }
+        // CGEventTap 콜백은 임의의 스레드. 카운터 증가는 메인 runloop 다음 tick 에서 처리해야
+        // SwiftUI view update 사이클과 충돌하지 않음.
         monitor.onCorrection = { [weak self] _, _ in
-            Task { @MainActor in
+            DispatchQueue.main.async {
                 self?.correctionCount += 1
             }
         }
 
-        updateMonitor()
+        // init 직후의 monitor 시작도 view 가 처음 그려진 다음 tick 에서 안전하게.
+        DispatchQueue.main.async { [weak self] in
+            self?.updateMonitor()
+        }
         startPermissionWatcher()
     }
 
@@ -99,7 +111,8 @@ final class AppState: ObservableObject {
 
     private func startPermissionWatcher() {
         permissionWatcher = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
-            Task { @MainActor in self?.tickPermissionWatcher() }
+            // Timer 콜백 안에서 직접 @Published 를 mutate 하지 말고 다음 tick 으로 미룬다.
+            DispatchQueue.main.async { self?.tickPermissionWatcher() }
         }
     }
 

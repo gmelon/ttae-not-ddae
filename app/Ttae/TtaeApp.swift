@@ -11,6 +11,7 @@ struct TtaeApp: App {
                 .environmentObject(state)
         } label: {
             Image("Logo")
+                .renderingMode(.template)
                 .clipShape(RoundedRectangle(cornerRadius: 4))
         }
         .menuBarExtraStyle(.window)
