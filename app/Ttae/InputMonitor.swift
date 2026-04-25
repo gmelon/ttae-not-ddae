@@ -121,42 +121,28 @@ final class InputMonitor {
                 return Unmanaged.passUnretained(event)
             }
 
-            log("matched: kc(\(lastKeyDownKeycode)+shift)+kc(\(keycode)+shift) -> \(String(describing: wrongChar))→\(String(describing: correctChar))")
+            log("matched: kc(\(lastKeyDownKeycode)+shift)+kc(\(keycode)+shift) -> \(String(describing: wrongChar))→\(String(describing: correctChar)) [stripping shift in place]")
 
             if let wrong = wrongChar, let correct = correctChar {
                 onCorrection(wrong, correct)
             }
 
-            postKeySameKeycodeWithoutShift(keycode: CGKeyCode(keycode), originalFlags: flags)
+            // 원본 이벤트의 shift 만 그 자리에서 벗겨서 그대로 흘려보낸다.
+            // 새 이벤트를 post 하면 Spotlight 같은 시스템 프로세스가 합성 이벤트를 거부하기 때문에
+            // 사용자의 진짜 이벤트를 가로채 flag 만 수정하는 방식이 가장 호환성이 좋다.
+            event.flags = flags.subtracting(.maskShift)
+            event.setIntegerValueField(.eventSourceUserData, value: Self.synthMarker)
 
-            // 우리는 shift 를 뺀 키를 주입했으므로 다음 매칭 기준으로는 shift 가 없는 셈
             lastKeyDownKeycode = keycode
             lastKeyDownHadShift = false
 
-            return nil // 원본 suppress
+            return Unmanaged.passUnretained(event)
         }
 
         lastKeyDownKeycode = keycode
         lastKeyDownHadShift = hasShift
 
         return Unmanaged.passUnretained(event)
-    }
-
-    private func postKeySameKeycodeWithoutShift(keycode: CGKeyCode, originalFlags: CGEventFlags) {
-        guard let source = eventSource else { return }
-        let tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap
-        let strippedFlags = originalFlags.subtracting(.maskShift)
-
-        for keyDown in [true, false] {
-            guard let event = CGEvent(
-                keyboardEventSource: source,
-                virtualKey: keycode,
-                keyDown: keyDown
-            ) else { continue }
-            event.flags = strippedFlags
-            event.setIntegerValueField(.eventSourceUserData, value: Self.synthMarker)
-            event.post(tap: tapLocation)
-        }
     }
 
     private func isKoreanInputSourceActive() -> Bool {
