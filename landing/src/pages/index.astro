@@ -102,7 +102,7 @@ const faqSchema = {
       </a>
       <nav class="nav-links">
         <a href={repoUrl} target="_blank" rel="noopener">GitHub</a>
-        <a href={dmgUrl} class="nav-cta">
+        <a href={dmgUrl} class="nav-cta" aria-label="macOS 다운로드">
           <svg
             class="apple-mark"
             viewBox="0 0 384 512"
@@ -114,7 +114,7 @@ const faqSchema = {
               d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7-56.6.9-116.5 44.2-116.5 132.3 0 26 4.8 52.9 14.4 80.6 12.8 36.4 58.9 125.7 107 124.2 25.1-.6 42.8-17.9 75.5-17.9 31.7 0 48.1 17.9 76.1 17.9 48.5-.7 90.2-81.9 102.4-118.4-65.1-30.7-59.3-90-59.3-90.3zm-56.3-156.8c27.1-32.2 24.6-61.5 23.8-72-23.9 1.4-51.6 16.3-67.4 34.6-17.4 19.7-27.6 44-25.4 71.4 25.9 2 49.5-11.2 69-34z"
             ></path>
           </svg>
-          <span>macOS 다운로드</span>
+          <span class="nav-cta-text">macOS 다운로드</span>
         </a>
       </nav>
     </div>
@@ -162,6 +162,10 @@ const faqSchema = {
             class="btn btn-ghost">GitHub 코드 보기</a
           >
         </div>
+
+        <p class="download-count" id="download-count" hidden>
+          지금까지 <strong id="download-count-num">0</strong>번 다운로드됐어요
+        </p>
 
         <div class="hero-demo" aria-hidden="true">
           <div class="demo-pair">
@@ -288,6 +292,58 @@ const faqSchema = {
       </div>
     </section>
   </main>
+
+  <script is:inline>
+    (() => {
+      const KEY = "ttae-dl-count";
+      const TTL = 5 * 60 * 1000;
+      const el = document.getElementById("download-count");
+      const num = document.getElementById("download-count-num");
+      if (!el || !num) return;
+
+      const reveal = (count) => {
+        if (typeof count !== "number" || count <= 0) return;
+        num.textContent = count.toLocaleString("ko-KR");
+        el.hidden = false;
+      };
+
+      try {
+        const cached = sessionStorage.getItem(KEY);
+        if (cached) {
+          const { count, ts } = JSON.parse(cached);
+          if (Date.now() - ts < TTL) {
+            reveal(count);
+            return;
+          }
+        }
+      } catch (_) {}
+
+      fetch(
+        "https://api.github.com/repos/gmelon/ttae-not-ddae/releases?per_page=100",
+        { headers: { Accept: "application/vnd.github+json" } }
+      )
+        .then((r) => (r.ok ? r.json() : null))
+        .then((releases) => {
+          if (!Array.isArray(releases)) return;
+          let total = 0;
+          for (const r of releases) {
+            for (const a of r.assets || []) {
+              if (typeof a.name === "string" && a.name.endsWith(".dmg")) {
+                total += a.download_count || 0;
+              }
+            }
+          }
+          try {
+            sessionStorage.setItem(
+              KEY,
+              JSON.stringify({ count: total, ts: Date.now() })
+            );
+          } catch (_) {}
+          reveal(total);
+        })
+        .catch(() => {});
+    })();
+  </script>
 
   <footer class="footer">
     <div class="container footer-inner">
@@ -420,6 +476,30 @@ const faqSchema = {
     gap: 10px;
     justify-content: center;
     margin-top: 4px;
+  }
+
+  .download-count {
+    margin-top: -14px;
+    color: var(--text-dim);
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    animation: dl-count-in 0.35s ease-out;
+  }
+  .download-count strong {
+    color: var(--accent);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  @keyframes dl-count-in {
+    from {
+      opacity: 0;
+      transform: translateY(-2px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .btn {
@@ -808,6 +888,38 @@ const faqSchema = {
   }
 
   @media (max-width: 540px) {
+    .nav .container {
+      padding: 0 16px;
+    }
+    .nav-row {
+      height: 54px;
+    }
+    .brand {
+      gap: 8px;
+      font-size: 14px;
+    }
+    .brand img {
+      width: 22px;
+      height: 22px;
+    }
+    .nav-links {
+      gap: 4px;
+      font-size: 13.5px;
+    }
+    .nav-links a {
+      padding: 8px 10px;
+    }
+    .nav-cta {
+      padding: 8px 11px;
+    }
+    .nav-cta .apple-mark {
+      width: 1.05em;
+      height: 1.15em;
+    }
+    .nav-cta-text {
+      display: none;
+    }
+
     .hero {
       padding: 72px 0 60px;
     }
