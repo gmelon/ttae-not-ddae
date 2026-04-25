@@ -6,14 +6,20 @@ final class AppState: ObservableObject {
     @Published var correctionEnabled: Bool {
         didSet {
             UserDefaults.standard.set(correctionEnabled, forKey: Key.enabled)
-            updateMonitor()
+            // updateMonitor 가 isMonitoring (다른 @Published) 을 mutate 하므로
+            // view update 사이클 안에서의 publish chain 을 끊어야 함.
+            Task { @MainActor in
+                self.updateMonitor()
+            }
         }
     }
 
     @Published var launchAtLogin: Bool {
         didSet {
             UserDefaults.standard.set(launchAtLogin, forKey: Key.launchAtLogin)
-            LaunchAtLogin.setEnabled(launchAtLogin)
+            Task { @MainActor in
+                LaunchAtLogin.setEnabled(self.launchAtLogin)
+            }
         }
     }
 
@@ -103,11 +109,16 @@ final class AppState: ObservableObject {
 
     private func tickPermissionWatcher() {
         let trusted = AccessibilityPermission.isTrusted()
-        if trusted != hasAccessibilityPermission {
+        let permissionChanged = trusted != hasAccessibilityPermission
+        if permissionChanged {
             hasAccessibilityPermission = trusted
         }
         if correctionEnabled, trusted, !isMonitoring {
-            updateMonitor()
+            // permission@Published 가 방금 갱신됐을 수 있으므로 다음 tick 으로 미뤄
+            // 이중 publish 를 피한다.
+            Task { @MainActor in
+                self.updateMonitor()
+            }
         }
     }
 
