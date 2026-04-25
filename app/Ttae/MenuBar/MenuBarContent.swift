@@ -3,7 +3,6 @@ import SwiftUI
 
 struct MenuBarPopover: View {
     @Environment(AppState.self) private var state
-    @Environment(\.openSettings) private var openSettings
 
     var body: some View {
         @Bindable var state = state
@@ -106,8 +105,7 @@ struct MenuBarPopover: View {
     private var footer: some View {
         HStack(spacing: 0) {
             footerButton(title: "환경설정", icon: "settings", shortcut: ",") {
-                openSettings()
-                NSApp.activate(ignoringOtherApps: true)
+                (NSApp.delegate as? AppDelegate)?.showSettings()
             }
             .frame(maxWidth: .infinity)
 

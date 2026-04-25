@@ -3,7 +3,7 @@ import SwiftUI
 @main
 struct TtaeApp: App {
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
-    @State private var state = AppState()
+    @State private var state = AppState.shared
 
     var body: some Scene {
         @Bindable var state = state
@@ -17,11 +17,5 @@ struct TtaeApp: App {
                 .clipShape(RoundedRectangle(cornerRadius: 4))
         }
         .menuBarExtraStyle(.window)
-
-        Settings {
-            SettingsView()
-                .environment(state)
-                .frame(width: 540, height: 460)
-        }
     }
 }

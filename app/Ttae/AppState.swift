@@ -5,6 +5,8 @@ import SwiftUI
 @MainActor
 @Observable
 final class AppState {
+    static let shared = AppState()
+
     var correctionEnabled: Bool {
         didSet {
             UserDefaults.standard.set(correctionEnabled, forKey: Key.enabled)
