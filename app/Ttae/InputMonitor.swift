@@ -8,8 +8,6 @@ final class InputMonitor {
     private var runLoopSource: CFRunLoopSource?
     private let eventSource = CGEventSource(stateID: .hidSystemState)
 
-    /// 우리가 합성한 이벤트를 식별하기 위한 magic value.
-    /// 이 값이 박혀 있는 이벤트는 다시 가공하지 않고 그대로 통과시킨다.
     private static let synthMarker: Int64 = 0x4D_DAE_4D
     private static let backspaceKeyCode: CGKeyCode = 51 // kVK_Delete
 
@@ -35,6 +33,7 @@ final class InputMonitor {
             },
             userInfo: pointer
         ) else {
+            log("tapCreate failed (Accessibility permission missing or revoked)")
             return false
         }
 
@@ -43,10 +42,14 @@ final class InputMonitor {
         runLoopSource = source
         CFRunLoopAddSource(CFRunLoopGetCurrent(), source, .commonModes)
         CGEvent.tapEnable(tap: tap, enable: true)
+        log("event tap created and enabled")
         return true
     }
 
     func stop() {
+        if eventTap != nil {
+            log("event tap stopped")
+        }
         if let source = runLoopSource {
             CFRunLoopRemoveSource(CFRunLoopGetCurrent(), source, .commonModes)
         }
@@ -64,11 +67,21 @@ final class InputMonitor {
         }
 
         let typed = characters(from: event)
+        let keycode = event.getIntegerValueField(.keyboardEventKeycode)
+        let codepointStr = typed
+            .map { String(format: "U+%04X", $0.unicodeScalars.first?.value ?? 0) }
+            .joined(separator: ",")
+        log("keyDown keycode=\(keycode) chars='\(typed.map(String.init).joined())' cp=\(codepointStr)")
+
         let exceptions = exceptionWords()
 
         for character in typed {
-            guard !exceptions.contains(String(character)) else { continue }
+            guard !exceptions.contains(String(character)) else {
+                log("  skipped (exception): \(character)")
+                continue
+            }
             if let corrected = CorrectionRules.correctedSyllable(for: character) {
+                log("  matched: \(character) -> \(corrected)")
                 onCorrection(character, corrected)
                 postCorrection(replacement: corrected)
             }
@@ -77,8 +90,6 @@ final class InputMonitor {
         return Unmanaged.passUnretained(event)
     }
 
-    /// 잘못 입력된 음절(예: 떄)이 화면에 들어간 직후, backspace 1회로 지우고
-    /// 올바른 음절(예: 때) 을 Unicode keystroke 로 다시 입력한다.
     private func postCorrection(replacement: Character) {
         guard let source = eventSource else { return }
         let tapLocation: CGEventTapLocation = .cgAnnotatedSessionEventTap
@@ -125,5 +136,9 @@ final class InputMonitor {
         guard length > 0 else { return [] }
         let slice = Array(buffer.prefix(length))
         return Array(String(utf16CodeUnits: slice, count: length))
+    }
+
+    private func log(_ message: String) {
+        NSLog("%@", "[Ttae][InputMonitor] \(message)" as NSString)
     }
 }

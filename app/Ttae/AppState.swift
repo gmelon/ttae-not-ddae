@@ -27,11 +27,10 @@ final class AppState: ObservableObject {
 
     @Published private(set) var isMonitoring = false
 
-    var hasAccessibilityPermission: Bool {
-        AccessibilityPermission.isTrusted()
-    }
+    @Published private(set) var hasAccessibilityPermission: Bool
 
     private let monitor = InputMonitor()
+    private var permissionWatcher: Timer?
 
     private enum Key {
         static let enabled = "correctionEnabled"
@@ -49,6 +48,7 @@ final class AppState: ObservableObject {
         self.launchAtLogin = LaunchAtLogin.isEnabled
         self.exceptionWords = defaults.stringArray(forKey: Key.exceptionWords) ?? []
         self.correctionCount = defaults.integer(forKey: Key.count)
+        self.hasAccessibilityPermission = AccessibilityPermission.isTrusted()
 
         monitor.isEnabled = { [weak self] in self?.correctionEnabled ?? false }
         monitor.exceptionWords = { [weak self] in Set(self?.exceptionWords ?? []) }
@@ -59,6 +59,11 @@ final class AppState: ObservableObject {
         }
 
         updateMonitor()
+        startPermissionWatcher()
+    }
+
+    deinit {
+        permissionWatcher?.invalidate()
     }
 
     func addExceptionWord(_ word: String) {
@@ -77,7 +82,24 @@ final class AppState: ObservableObject {
 
     func requestAccessibility() {
         AccessibilityPermission.prompt()
-        objectWillChange.send()
+    }
+
+    /// Accessibility 권한 상태가 변하면 UI 와 monitor 를 자동 동기화한다.
+    /// 권한이 새로 부여된 경우에도 사용자가 앱을 재기동할 필요 없이 1초 내로 event tap 이 살아남.
+    private func startPermissionWatcher() {
+        permissionWatcher = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.tickPermissionWatcher() }
+        }
+    }
+
+    private func tickPermissionWatcher() {
+        let trusted = AccessibilityPermission.isTrusted()
+        if trusted != hasAccessibilityPermission {
+            hasAccessibilityPermission = trusted
+        }
+        if correctionEnabled, trusted, !isMonitoring {
+            updateMonitor()
+        }
     }
 
     private func updateMonitor() {
