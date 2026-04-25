@@ -6,20 +6,14 @@ final class AppState: ObservableObject {
     @Published var correctionEnabled: Bool {
         didSet {
             UserDefaults.standard.set(correctionEnabled, forKey: Key.enabled)
-            // updateMonitor 가 isMonitoring (다른 @Published) 을 mutate 하므로
-            // view update 사이클 안에서의 publish chain 을 끊어야 함.
-            Task { @MainActor in
-                self.updateMonitor()
-            }
+            updateMonitor()
         }
     }
 
     @Published var launchAtLogin: Bool {
         didSet {
             UserDefaults.standard.set(launchAtLogin, forKey: Key.launchAtLogin)
-            Task { @MainActor in
-                LaunchAtLogin.setEnabled(self.launchAtLogin)
-            }
+            LaunchAtLogin.setEnabled(launchAtLogin)
         }
     }
 
@@ -35,9 +29,13 @@ final class AppState: ObservableObject {
         didSet { UserDefaults.standard.set(correctionCount, forKey: Key.count) }
     }
 
-    @Published private(set) var isMonitoring = false
-
     @Published private(set) var hasAccessibilityPermission: Bool
+
+    /// 모니터링 활성 여부는 별도의 @Published 가 아니라 다른 두 @Published 로부터 파생되는 computed.
+    /// @Published 끼리의 didSet 체인을 끊어서 SwiftUI 의 "Publishing changes from within view updates" 경고를 방지한다.
+    var isMonitoring: Bool {
+        correctionEnabled && hasAccessibilityPermission
+    }
 
     private let monitor = InputMonitor()
     private var permissionWatcher: Timer?
@@ -99,8 +97,6 @@ final class AppState: ObservableObject {
         AccessibilityPermission.prompt()
     }
 
-    /// Accessibility 권한 상태가 변하면 UI 와 monitor 를 자동 동기화한다.
-    /// 권한 부여 시 사용자가 앱을 재기동할 필요 없이 1초 내로 event tap 이 살아남.
     private func startPermissionWatcher() {
         permissionWatcher = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             Task { @MainActor in self?.tickPermissionWatcher() }
@@ -109,25 +105,19 @@ final class AppState: ObservableObject {
 
     private func tickPermissionWatcher() {
         let trusted = AccessibilityPermission.isTrusted()
-        let permissionChanged = trusted != hasAccessibilityPermission
-        if permissionChanged {
+        if trusted != hasAccessibilityPermission {
             hasAccessibilityPermission = trusted
         }
-        if correctionEnabled, trusted, !isMonitoring {
-            // permission@Published 가 방금 갱신됐을 수 있으므로 다음 tick 으로 미뤄
-            // 이중 publish 를 피한다.
-            Task { @MainActor in
-                self.updateMonitor()
-            }
+        if correctionEnabled, trusted {
+            updateMonitor()
         }
     }
 
     private func updateMonitor() {
         if correctionEnabled {
-            isMonitoring = monitor.start()
+            _ = monitor.start()
         } else {
             monitor.stop()
-            isMonitoring = false
         }
     }
 }
