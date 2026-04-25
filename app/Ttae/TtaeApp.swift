@@ -5,12 +5,15 @@ struct TtaeApp: App {
     @StateObject private var state = AppState()
 
     var body: some Scene {
-        MenuBarExtra {
+        MenuBarExtra(isInserted: $state.menuBarIconVisible) {
             MenuBarPopover()
                 .environmentObject(state)
         } label: {
-            Text("때")
-                .font(.system(size: 14, weight: .semibold))
+            Image("Logo")
+                .resizable()
+                .interpolation(.high)
+                .frame(width: 18, height: 18)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
         }
         .menuBarExtraStyle(.window)
 

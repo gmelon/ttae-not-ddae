@@ -21,6 +21,10 @@ final class AppState: ObservableObject {
         didSet { UserDefaults.standard.set(exceptionWords, forKey: Key.exceptionWords) }
     }
 
+    @Published var menuBarIconVisible: Bool {
+        didSet { UserDefaults.standard.set(menuBarIconVisible, forKey: Key.menuBarIconVisible) }
+    }
+
     @Published private(set) var correctionCount: Int {
         didSet { UserDefaults.standard.set(correctionCount, forKey: Key.count) }
     }
@@ -37,6 +41,7 @@ final class AppState: ObservableObject {
         static let launchAtLogin = "launchAtLogin"
         static let exceptionWords = "exceptionWords"
         static let count = "correctionCount"
+        static let menuBarIconVisible = "menuBarIconVisible"
     }
 
     init() {
@@ -44,9 +49,13 @@ final class AppState: ObservableObject {
         if defaults.object(forKey: Key.enabled) == nil {
             defaults.set(true, forKey: Key.enabled)
         }
+        if defaults.object(forKey: Key.menuBarIconVisible) == nil {
+            defaults.set(true, forKey: Key.menuBarIconVisible)
+        }
         self.correctionEnabled = defaults.bool(forKey: Key.enabled)
         self.launchAtLogin = LaunchAtLogin.isEnabled
         self.exceptionWords = defaults.stringArray(forKey: Key.exceptionWords) ?? []
+        self.menuBarIconVisible = defaults.bool(forKey: Key.menuBarIconVisible)
         self.correctionCount = defaults.integer(forKey: Key.count)
         self.hasAccessibilityPermission = AccessibilityPermission.isTrusted()
 

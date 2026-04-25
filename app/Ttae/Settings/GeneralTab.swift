@@ -14,6 +14,8 @@ struct GeneralTab: View {
 
             Section {
                 Toggle("로그인 시 자동 실행", isOn: $state.launchAtLogin)
+                Toggle("메뉴바 아이콘 표시", isOn: $state.menuBarIconVisible)
+                    .help("끄면 메뉴바에서 아이콘이 사라집니다. 환경설정 창은 그대로 유지됩니다.")
             } header: {
                 Text("시작")
             }

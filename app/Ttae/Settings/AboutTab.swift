@@ -37,7 +37,7 @@ struct AboutTab: View {
             Text(" 가 아니라 ")
                 .foregroundStyle(.secondary)
             Text("때")
-                .foregroundStyle(Color.accentColor)
+                .foregroundStyle(.primary)
                 .fontWeight(.semibold)
         }
         .font(.system(size: 32, weight: .medium))

@@ -98,10 +98,14 @@ struct MenuBarPopover: View {
                 openSettings()
                 NSApp.activate(ignoringOtherApps: true)
             }
+            .frame(maxWidth: .infinity)
+
             Divider().frame(height: 18)
+
             footerButton(title: "종료", systemImage: "power", shortcut: "q") {
                 NSApp.terminate(nil)
             }
+            .frame(maxWidth: .infinity)
         }
         .font(.system(size: 12))
         .foregroundStyle(.secondary)
@@ -115,12 +119,13 @@ struct MenuBarPopover: View {
     ) -> some View {
         Button(action: action) {
             HStack(spacing: 5) {
+                Spacer(minLength: 0)
                 Image(systemName: systemImage)
                 Text(title)
+                Spacer(minLength: 0)
             }
-            .frame(maxWidth: .infinity)
-            .contentShape(Rectangle())
             .padding(.vertical, 9)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .keyboardShortcut(shortcut)

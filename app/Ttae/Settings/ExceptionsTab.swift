@@ -9,17 +9,12 @@ struct ExceptionsTab: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             description
-
             inputBar
-
-            if state.exceptionWords.isEmpty {
-                emptyState
-            } else {
-                wordList
-                listFooter
-            }
+            contentArea
+            listFooter
         }
         .padding(20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private var description: some View {
@@ -44,6 +39,18 @@ struct ExceptionsTab: View {
         }
     }
 
+    @ViewBuilder
+    private var contentArea: some View {
+        Group {
+            if state.exceptionWords.isEmpty {
+                emptyState
+            } else {
+                wordList
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
     private var wordList: some View {
         List(selection: $selection) {
             ForEach(state.exceptionWords, id: \.self) { word in
@@ -51,7 +58,31 @@ struct ExceptionsTab: View {
             }
         }
         .listStyle(.bordered(alternatesRowBackgrounds: true))
-        .frame(minHeight: 200)
+    }
+
+    private var emptyState: some View {
+        VStack(spacing: 10) {
+            Spacer()
+            Image(systemName: "tray")
+                .font(.system(size: 32, weight: .light))
+                .foregroundStyle(.tertiary)
+            Text("아직 추가된 예외 단어가 없습니다")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+            Text("위 입력란에 단어를 입력해 추가해 보세요")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 6)
+                .strokeBorder(Color.secondary.opacity(0.18), lineWidth: 1)
+                .background(
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(Color(NSColor.alternatingContentBackgroundColors.first ?? .clear))
+                )
+        )
     }
 
     private var listFooter: some View {
@@ -59,6 +90,8 @@ struct ExceptionsTab: View {
             Text("\(state.exceptionWords.count)개")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .contentTransition(.numericText())
+                .animation(.snappy, value: state.exceptionWords.count)
             Spacer()
             if !selection.isEmpty {
                 Button(role: .destructive) {
@@ -70,26 +103,6 @@ struct ExceptionsTab: View {
                 .controlSize(.small)
             }
         }
-    }
-
-    private var emptyState: some View {
-        VStack(spacing: 10) {
-            Image(systemName: "tray")
-                .font(.system(size: 32, weight: .light))
-                .foregroundStyle(.tertiary)
-            Text("아직 추가된 예외 단어가 없습니다")
-                .font(.callout)
-                .foregroundStyle(.secondary)
-            Text("위 입력란에 단어를 입력해 추가해 보세요")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 60)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color.secondary.opacity(0.05))
-        )
     }
 
     private func add() {

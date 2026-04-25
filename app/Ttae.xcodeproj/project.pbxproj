@@ -11,6 +11,7 @@
 		33C81DC7F85468B70578D727 /* GeneralTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2662253D8614AF15D7ABEDC2 /* GeneralTab.swift */; };
 		3D4E5F62E4C72056976309DB /* AccessibilityPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CACE1D1FC520968A63059D1 /* AccessibilityPermission.swift */; };
 		463B91C4F1C18C2BD0AA7EE3 /* TtaeCore in Frameworks */ = {isa = PBXBuildFile; productRef = 966CAFD29C8A50114E49F350 /* TtaeCore */; };
+		5BAE84BA955116D74ED87F11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DB72CE6934D2198E84839A8 /* Assets.xcassets */; };
 		9A61D7C11D81AF35F20A3068 /* TtaeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB21DE6E59566EDCCBC3C70 /* TtaeApp.swift */; };
 		B09BE26208D428AA8D4D1ADD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806FC0231253CBEC074FC210 /* SettingsView.swift */; };
 		B5C93C9A9592DD8F04E86C8F /* InputMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33856B2BCC10A37C429F09C1 /* InputMonitor.swift */; };
@@ -34,6 +35,7 @@
 		7C0D2BF52632AEAF1327A432 /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
 		806FC0231253CBEC074FC210 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8BB21DE6E59566EDCCBC3C70 /* TtaeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TtaeApp.swift; sourceTree = "<group>"; };
+		8DB72CE6934D2198E84839A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 			children = (
 				2CACE1D1FC520968A63059D1 /* AccessibilityPermission.swift */,
 				76AF100CC87751A7517D846D /* AppState.swift */,
+				8DB72CE6934D2198E84839A8 /* Assets.xcassets */,
 				33856B2BCC10A37C429F09C1 /* InputMonitor.swift */,
 				7C0D2BF52632AEAF1327A432 /* LaunchAtLogin.swift */,
 				7B95277A5581668BA3F4576C /* Ttae.entitlements */,
@@ -115,6 +118,7 @@
 			buildConfigurationList = 5C5FFD80142E8510B48E79F7 /* Build configuration list for PBXNativeTarget "Ttae" */;
 			buildPhases = (
 				C476AAE365C8072FE0D69FE5 /* Sources */,
+				BD4BD8A91D5B41586DD74347 /* Resources */,
 				175FD600A61CF5E4D4B98DAF /* Frameworks */,
 			);
 			buildRules = (
@@ -165,6 +169,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BD4BD8A91D5B41586DD74347 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BAE84BA955116D74ED87F11 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C476AAE365C8072FE0D69FE5 /* Sources */ = {
