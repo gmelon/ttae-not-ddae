@@ -1,11 +1,8 @@
 import Foundation
-import os
 import SwiftUI
 
 @MainActor
 final class AppState: ObservableObject {
-    private static let logger = Logger(subsystem: "dev.gmelon.ttae", category: "AppState")
-
     @Published var correctionEnabled: Bool {
         didSet {
             UserDefaults.standard.set(correctionEnabled, forKey: Key.enabled)
@@ -61,15 +58,8 @@ final class AppState: ObservableObject {
             }
         }
 
-        log("init: enabled=\(self.correctionEnabled), launchAtLogin=\(self.launchAtLogin), exceptions=\(self.exceptionWords.count), permission=\(self.hasAccessibilityPermission)")
-
         updateMonitor()
         startPermissionWatcher()
-    }
-
-    private func log(_ message: String) {
-        Self.logger.info("\(message, privacy: .public)")
-        print("[Ttae][AppState] \(message)")
     }
 
     deinit {
@@ -95,7 +85,7 @@ final class AppState: ObservableObject {
     }
 
     /// Accessibility 권한 상태가 변하면 UI 와 monitor 를 자동 동기화한다.
-    /// 권한이 새로 부여된 경우에도 사용자가 앱을 재기동할 필요 없이 1초 내로 event tap 이 살아남.
+    /// 권한 부여 시 사용자가 앱을 재기동할 필요 없이 1초 내로 event tap 이 살아남.
     private func startPermissionWatcher() {
         permissionWatcher = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             Task { @MainActor in self?.tickPermissionWatcher() }
@@ -105,24 +95,19 @@ final class AppState: ObservableObject {
     private func tickPermissionWatcher() {
         let trusted = AccessibilityPermission.isTrusted()
         if trusted != hasAccessibilityPermission {
-            log("permission state changed: \(hasAccessibilityPermission) -> \(trusted)")
             hasAccessibilityPermission = trusted
         }
         if correctionEnabled, trusted, !isMonitoring {
-            log("retrying monitor.start() after permission flip")
             updateMonitor()
         }
     }
 
     private func updateMonitor() {
         if correctionEnabled {
-            let started = monitor.start()
-            isMonitoring = started
-            log("updateMonitor: enabled=true monitor.start()=\(started)")
+            isMonitoring = monitor.start()
         } else {
             monitor.stop()
             isMonitoring = false
-            log("updateMonitor: enabled=false monitor stopped")
         }
     }
 }

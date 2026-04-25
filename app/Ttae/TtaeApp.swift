@@ -6,19 +6,18 @@ struct TtaeApp: App {
 
     var body: some Scene {
         MenuBarExtra {
-            MenuBarContent()
+            MenuBarPopover()
                 .environmentObject(state)
         } label: {
-            Image(systemName: state.correctionEnabled
-                  ? "character.bubble.fill"
-                  : "character.bubble")
+            Text("때")
+                .font(.system(size: 14, weight: .semibold))
         }
-        .menuBarExtraStyle(.menu)
+        .menuBarExtraStyle(.window)
 
         Settings {
             SettingsView()
                 .environmentObject(state)
-                .frame(width: 520, height: 440)
+                .frame(width: 540, height: 460)
         }
     }
 }

@@ -9,14 +9,13 @@ import TtaeCore
 /// 두벌식 자판 keycode 시퀀스로 패턴을 잡아 처리한다.
 ///
 /// 직전 keyDown 이 (shift + 쌍자음 키), 현재 keyDown 이 (shift + ㅒ/ㅖ 키) 일 때
-/// 현재 원본 이벤트를 suppress 하고, 같은 keycode 를 shift 없이 재주입한다.
+/// 현재 이벤트의 shift modifier 만 그 자리에서 벗겨 그대로 통과시킨다.
 /// IME 는 ㅐ/ㅔ 를 받아 (쌍자음 + ㅐ/ㅔ) 음절로 합성한다.
 final class InputMonitor {
     private static let logger = Logger(subsystem: "dev.gmelon.ttae", category: "InputMonitor")
 
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
-    private let eventSource = CGEventSource(stateID: .hidSystemState)
 
     private static let synthMarker: Int64 = 0x4D_DAE_4D
 
@@ -45,7 +44,6 @@ final class InputMonitor {
     @discardableResult
     func start() -> Bool {
         guard eventTap == nil else { return true }
-        log("start() called")
         let mask = CGEventMask(1 << CGEventType.keyDown.rawValue)
         let pointer = Unmanaged.passUnretained(self).toOpaque()
 
@@ -61,7 +59,7 @@ final class InputMonitor {
             },
             userInfo: pointer
         ) else {
-            log("tapCreate FAILED (Accessibility permission missing or revoked)")
+            Self.logger.error("tapCreate failed: Accessibility permission missing or revoked")
             return false
         }
 
@@ -70,14 +68,10 @@ final class InputMonitor {
         runLoopSource = source
         CFRunLoopAddSource(CFRunLoopGetCurrent(), source, .commonModes)
         CGEvent.tapEnable(tap: tap, enable: true)
-        log("event tap created and enabled")
         return true
     }
 
     func stop() {
-        if eventTap != nil {
-            log("event tap stopped")
-        }
         if let source = runLoopSource {
             CFRunLoopRemoveSource(CFRunLoopGetCurrent(), source, .commonModes)
         }
@@ -100,36 +94,26 @@ final class InputMonitor {
         let flags = event.flags
         let hasShift = flags.contains(.maskShift)
 
-        // 한글 IME 가 활성화된 상태가 아니면 패턴 매칭 자체를 스킵한다 (영문 EO 는 그대로 둠).
-        let koreanActive = isKoreanInputSourceActive()
-
-        // 패턴: 직전 = shift + 쌍자음, 현재 = shift + ㅒ/ㅖ
-        if koreanActive,
-           hasShift,
+        if hasShift,
            lastKeyDownHadShift,
            let medial = Self.shiftedVowelKeycodes[keycode],
-           let initial = Self.doubleConsonantKeycodes[lastKeyDownKeycode] {
+           let initial = Self.doubleConsonantKeycodes[lastKeyDownKeycode],
+           isKoreanInputSourceActive() {
 
             let wrongChar = Hangul.compose(initial: initial, medial: medial.wrong, final: 0)
             let correctChar = Hangul.compose(initial: initial, medial: medial.fixed, final: 0)
             let exceptions = exceptionWords()
 
             if let wrong = wrongChar, exceptions.contains(String(wrong)) {
-                log("matched but exception, passing through: \(wrong)")
                 lastKeyDownKeycode = keycode
                 lastKeyDownHadShift = hasShift
                 return Unmanaged.passUnretained(event)
             }
 
-            log("matched: kc(\(lastKeyDownKeycode)+shift)+kc(\(keycode)+shift) -> \(String(describing: wrongChar))→\(String(describing: correctChar)) [stripping shift in place]")
-
             if let wrong = wrongChar, let correct = correctChar {
                 onCorrection(wrong, correct)
             }
 
-            // 원본 이벤트의 shift 만 그 자리에서 벗겨서 그대로 흘려보낸다.
-            // 새 이벤트를 post 하면 Spotlight 같은 시스템 프로세스가 합성 이벤트를 거부하기 때문에
-            // 사용자의 진짜 이벤트를 가로채 flag 만 수정하는 방식이 가장 호환성이 좋다.
             event.flags = flags.subtracting(.maskShift)
             event.setIntegerValueField(.eventSourceUserData, value: Self.synthMarker)
 
@@ -154,10 +138,5 @@ final class InputMonitor {
         }
         let id = Unmanaged<CFString>.fromOpaque(raw).takeUnretainedValue() as String
         return id.contains("Korean") || id.lowercased().contains("hangul")
-    }
-
-    private func log(_ message: String) {
-        Self.logger.info("\(message, privacy: .public)")
-        print("[Ttae][InputMonitor] \(message)")
     }
 }
