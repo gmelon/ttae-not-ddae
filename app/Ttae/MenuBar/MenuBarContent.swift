@@ -9,31 +9,35 @@ struct MenuBarPopover: View {
         VStack(spacing: 0) {
             header
             counter
-            Divider()
+
+            softDivider
             toggleRow
 
             if !state.hasAccessibilityPermission {
-                Divider()
+                softDivider
                 permissionBanner
             }
 
-            Divider()
+            softDivider
             footer
         }
-        .frame(width: 260)
+        .frame(width: 264)
+    }
+
+    private var softDivider: some View {
+        Divider().opacity(0.5)
     }
 
     private var header: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 0) {
             Text("떄가아니라때")
                 .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(.primary)
             Spacer()
             statusDot
         }
         .padding(.horizontal, 14)
         .padding(.top, 12)
-        .padding(.bottom, 8)
+        .padding(.bottom, 6)
     }
 
     private var statusDot: some View {
@@ -60,19 +64,15 @@ struct MenuBarPopover: View {
     }
 
     private var toggleRow: some View {
-        Toggle(isOn: $state.correctionEnabled) {
-            Text("자동 교정")
-                .font(.body)
-        }
-        .toggleStyle(.switch)
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
+        Toggle("자동 교정", isOn: $state.correctionEnabled)
+            .toggleStyle(.switch)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
     }
 
     private var permissionBanner: some View {
         HStack(spacing: 10) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .font(.system(size: 13))
+            MageIcon("warning", size: 16)
                 .foregroundStyle(.orange)
             VStack(alignment: .leading, spacing: 1) {
                 Text("권한이 필요합니다")
@@ -88,21 +88,21 @@ struct MenuBarPopover: View {
                 .controlSize(.small)
         }
         .padding(.horizontal, 14)
-        .padding(.vertical, 9)
+        .padding(.vertical, 10)
         .background(Color.orange.opacity(0.08))
     }
 
     private var footer: some View {
         HStack(spacing: 0) {
-            footerButton(title: "환경설정", systemImage: "gearshape", shortcut: ",") {
+            footerButton(title: "환경설정", icon: "settings", shortcut: ",") {
                 openSettings()
                 NSApp.activate(ignoringOtherApps: true)
             }
             .frame(maxWidth: .infinity)
 
-            Divider().frame(height: 18)
+            Divider().frame(height: 16).opacity(0.5)
 
-            footerButton(title: "종료", systemImage: "power", shortcut: "q") {
+            footerButton(title: "종료", icon: "power", shortcut: "q") {
                 NSApp.terminate(nil)
             }
             .frame(maxWidth: .infinity)
@@ -113,14 +113,14 @@ struct MenuBarPopover: View {
 
     private func footerButton(
         title: String,
-        systemImage: String,
+        icon: String,
         shortcut: KeyEquivalent,
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
-            HStack(spacing: 5) {
+            HStack(spacing: 6) {
                 Spacer(minLength: 0)
-                Image(systemName: systemImage)
+                MageIcon(icon, size: 13)
                 Text(title)
                 Spacer(minLength: 0)
             }

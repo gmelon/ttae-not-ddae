@@ -7,21 +7,15 @@ struct AboutTab: View {
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
-
             wordmark
                 .padding(.bottom, 14)
-
             Text("세상에 '떄' 라는 말은 없다.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .padding(.bottom, 26)
-
             versionBlock
-
             Spacer()
-
             links
-
             Spacer().frame(height: 8)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -59,10 +53,16 @@ struct AboutTab: View {
     private var links: some View {
         VStack(spacing: 8) {
             Link(destination: githubURL) {
-                Label("GitHub 리포지토리", systemImage: "arrow.up.right.square")
+                HStack(spacing: 6) {
+                    MageIcon("link", size: 14)
+                    Text("GitHub 리포지토리")
+                }
             }
             Link(destination: licenseURL) {
-                Label("오픈소스 라이선스 (MIT)", systemImage: "doc.text")
+                HStack(spacing: 6) {
+                    MageIcon("file", size: 14)
+                    Text("오픈소스 라이선스 (MIT)")
+                }
             }
         }
         .font(.callout)

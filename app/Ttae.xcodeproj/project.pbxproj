@@ -12,6 +12,7 @@
 		3D4E5F62E4C72056976309DB /* AccessibilityPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CACE1D1FC520968A63059D1 /* AccessibilityPermission.swift */; };
 		463B91C4F1C18C2BD0AA7EE3 /* TtaeCore in Frameworks */ = {isa = PBXBuildFile; productRef = 966CAFD29C8A50114E49F350 /* TtaeCore */; };
 		5BAE84BA955116D74ED87F11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DB72CE6934D2198E84839A8 /* Assets.xcassets */; };
+		7113EFB402E2FD0099333ED5 /* MageIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701D69A471010FAABD506864 /* MageIcon.swift */; };
 		9A61D7C11D81AF35F20A3068 /* TtaeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB21DE6E59566EDCCBC3C70 /* TtaeApp.swift */; };
 		B09BE26208D428AA8D4D1ADD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806FC0231253CBEC074FC210 /* SettingsView.swift */; };
 		B5C93C9A9592DD8F04E86C8F /* InputMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33856B2BCC10A37C429F09C1 /* InputMonitor.swift */; };
@@ -30,6 +31,7 @@
 		33856B2BCC10A37C429F09C1 /* InputMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputMonitor.swift; sourceTree = "<group>"; };
 		5F369E3F1691DCAD71B0AA1D /* app */ = {isa = PBXFileReference; lastKnownFileType = folder; name = app; path = .; sourceTree = SOURCE_ROOT; };
 		6BB6F29DA7E4D24F2662BB35 /* ExceptionsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExceptionsTab.swift; sourceTree = "<group>"; };
+		701D69A471010FAABD506864 /* MageIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MageIcon.swift; sourceTree = "<group>"; };
 		76AF100CC87751A7517D846D /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		7B95277A5581668BA3F4576C /* Ttae.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Ttae.entitlements; sourceTree = "<group>"; };
 		7C0D2BF52632AEAF1327A432 /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
@@ -58,6 +60,7 @@
 				8DB72CE6934D2198E84839A8 /* Assets.xcassets */,
 				33856B2BCC10A37C429F09C1 /* InputMonitor.swift */,
 				7C0D2BF52632AEAF1327A432 /* LaunchAtLogin.swift */,
+				701D69A471010FAABD506864 /* MageIcon.swift */,
 				7B95277A5581668BA3F4576C /* Ttae.entitlements */,
 				8BB21DE6E59566EDCCBC3C70 /* TtaeApp.swift */,
 				747AAD51DF48EFF77295F312 /* MenuBar */,
@@ -193,6 +196,7 @@
 				33C81DC7F85468B70578D727 /* GeneralTab.swift in Sources */,
 				B5C93C9A9592DD8F04E86C8F /* InputMonitor.swift in Sources */,
 				F64C7F9F758A18E8F8A90A53 /* LaunchAtLogin.swift in Sources */,
+				7113EFB402E2FD0099333ED5 /* MageIcon.swift in Sources */,
 				ED89657B39559050DD6323EB /* MenuBarContent.swift in Sources */,
 				B09BE26208D428AA8D4D1ADD /* SettingsView.swift in Sources */,
 				9A61D7C11D81AF35F20A3068 /* TtaeApp.swift in Sources */,

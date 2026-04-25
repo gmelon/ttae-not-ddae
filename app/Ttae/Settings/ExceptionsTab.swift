@@ -63,8 +63,7 @@ struct ExceptionsTab: View {
     private var emptyState: some View {
         VStack(spacing: 10) {
             Spacer()
-            Image(systemName: "tray")
-                .font(.system(size: 32, weight: .light))
+            MageIcon("inbox", size: 36)
                 .foregroundStyle(.tertiary)
             Text("아직 추가된 예외 단어가 없습니다")
                 .font(.callout)

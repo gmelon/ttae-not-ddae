@@ -37,37 +37,42 @@ struct GeneralTab: View {
             }
 
             Section {
-                if state.hasAccessibilityPermission {
-                    HStack(spacing: 8) {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(.green)
-                        Text("Accessibility 권한이 부여되어 있습니다")
-                    }
-                    .font(.callout)
-                } else {
-                    VStack(alignment: .leading, spacing: 10) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(.orange)
-                            Text("Accessibility 권한이 필요합니다")
-                                .fontWeight(.medium)
-                        }
-                        Text("시스템 설정 > 개인 정보 보호 및 보안 > 손쉬운 사용 에서 떄가아니라때를 허용해 주세요.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                        Button("권한 요청 / 시스템 설정 열기") {
-                            state.requestAccessibility()
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.small)
-                    }
-                    .padding(.vertical, 2)
-                }
+                permissionContent
             } header: {
                 Text("권한")
             }
         }
         .formStyle(.grouped)
+    }
+
+    @ViewBuilder
+    private var permissionContent: some View {
+        if state.hasAccessibilityPermission {
+            HStack(spacing: 10) {
+                MageIcon("check", size: 18)
+                    .foregroundStyle(.green)
+                Text("Accessibility 권한이 부여되어 있습니다")
+                    .font(.callout)
+            }
+        } else {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 10) {
+                    MageIcon("warning", size: 18)
+                        .foregroundStyle(.orange)
+                    Text("Accessibility 권한이 필요합니다")
+                        .fontWeight(.medium)
+                }
+                Text("시스템 설정 > 개인 정보 보호 및 보안 > 손쉬운 사용 에서 떄가아니라때를 허용해 주세요.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                Button("권한 요청 / 시스템 설정 열기") {
+                    state.requestAccessibility()
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
+            }
+            .padding(.vertical, 2)
+        }
     }
 }

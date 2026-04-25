@@ -57,3 +57,7 @@ swift test
 ### 라이선스
 
 MIT License. 자세한 내용은 [LICENSE](LICENSE) 참고.
+
+### Third-party
+
+- 아이콘: [Mage Icons](https://mageicons.com/) (Apache License 2.0)
