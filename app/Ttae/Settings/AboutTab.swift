@@ -54,15 +54,23 @@ struct AboutTab: View {
 
     @ViewBuilder
     private var versionBlock: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack(spacing: 8) {
+        // Grid 로 라벨/값 두 컬럼 정렬. 라벨은 우측 정렬, 값은 좌측 정렬해서
+        // 컬럼 경계에 정보가 모이고, 양 행의 값 셀에 동일한 ghost 를 둬서
+        // 상태 전환에도 위치가 흔들리지 않는다.
+        Grid(horizontalSpacing: 8, verticalSpacing: 4) {
+            GridRow {
                 Text("현재 버전")
                     .foregroundStyle(.secondary)
-                Text(currentVersion)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.primary)
+                    .gridColumnAlignment(.trailing)
+                ZStack(alignment: .leading) {
+                    ghostValueText
+                    Text(currentVersion)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.primary)
+                }
+                .gridColumnAlignment(.leading)
             }
-            HStack(spacing: 8) {
+            GridRow {
                 Text("최신 버전")
                     .foregroundStyle(.secondary)
                 latestVersionView
@@ -71,8 +79,25 @@ struct AboutTab: View {
         .font(.callout)
     }
 
-    @ViewBuilder
+    private var ghostValueText: some View {
+        // 버전 숫자(99.99.99) 폭만 점유. "· 업데이트 가능" 까지 포함하면 폭이
+        // 너무 커져서 visible 컨텐츠가 좌측에 쏠리는 인상을 줌. 업데이트 케이스에서는
+        // ZStack 이 자연스럽게 넓어지지만 그건 1회성 전환이라 허용.
+        Text("99.99.99")
+            .fontWeight(.semibold)
+            .foregroundStyle(.clear)
+            .accessibilityHidden(true)
+    }
+
     private var latestVersionView: some View {
+        ZStack(alignment: .leading) {
+            ghostValueText
+            latestActualContent
+        }
+    }
+
+    @ViewBuilder
+    private var latestActualContent: some View {
         if let latest = latestVersion {
             if hasUpdate {
                 Button(action: openDownload) {
