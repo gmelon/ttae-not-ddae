@@ -235,7 +235,7 @@ jobs:
           body: |
             ## 떄가아니라때 ${{ steps.version.outputs.tag }}
 
-            세상에 떄 라는 말은 없다.
+            세상에 떄 라는 글자는 없다.
 
             ### 설치
 
