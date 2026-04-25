@@ -10,9 +10,6 @@ struct TtaeApp: App {
                 .environmentObject(state)
         } label: {
             Image("Logo")
-                .resizable()
-                .interpolation(.high)
-                .frame(width: 18, height: 18)
                 .clipShape(RoundedRectangle(cornerRadius: 4))
         }
         .menuBarExtraStyle(.window)
