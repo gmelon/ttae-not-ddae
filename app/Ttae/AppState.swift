@@ -1,8 +1,11 @@
 import Foundation
+import os
 import SwiftUI
 
 @MainActor
 final class AppState: ObservableObject {
+    private static let logger = Logger(subsystem: "dev.gmelon.ttae", category: "AppState")
+
     @Published var correctionEnabled: Bool {
         didSet {
             UserDefaults.standard.set(correctionEnabled, forKey: Key.enabled)
@@ -58,8 +61,15 @@ final class AppState: ObservableObject {
             }
         }
 
+        log("init: enabled=\(self.correctionEnabled), launchAtLogin=\(self.launchAtLogin), exceptions=\(self.exceptionWords.count), permission=\(self.hasAccessibilityPermission)")
+
         updateMonitor()
         startPermissionWatcher()
+    }
+
+    private func log(_ message: String) {
+        Self.logger.info("\(message, privacy: .public)")
+        print("[Ttae][AppState] \(message)")
     }
 
     deinit {
@@ -95,19 +105,24 @@ final class AppState: ObservableObject {
     private func tickPermissionWatcher() {
         let trusted = AccessibilityPermission.isTrusted()
         if trusted != hasAccessibilityPermission {
+            log("permission state changed: \(hasAccessibilityPermission) -> \(trusted)")
             hasAccessibilityPermission = trusted
         }
         if correctionEnabled, trusted, !isMonitoring {
+            log("retrying monitor.start() after permission flip")
             updateMonitor()
         }
     }
 
     private func updateMonitor() {
         if correctionEnabled {
-            isMonitoring = monitor.start()
+            let started = monitor.start()
+            isMonitoring = started
+            log("updateMonitor: enabled=true monitor.start()=\(started)")
         } else {
             monitor.stop()
             isMonitoring = false
+            log("updateMonitor: enabled=false monitor stopped")
         }
     }
 }

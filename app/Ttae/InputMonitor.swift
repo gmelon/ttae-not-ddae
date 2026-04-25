@@ -1,9 +1,12 @@
 import AppKit
 import CoreGraphics
 import Foundation
+import os
 import TtaeCore
 
 final class InputMonitor {
+    private static let logger = Logger(subsystem: "dev.gmelon.ttae", category: "InputMonitor")
+
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
     private let eventSource = CGEventSource(stateID: .hidSystemState)
@@ -18,6 +21,7 @@ final class InputMonitor {
     @discardableResult
     func start() -> Bool {
         guard eventTap == nil else { return true }
+        log("start() called")
         let mask = CGEventMask(1 << CGEventType.keyDown.rawValue)
         let pointer = Unmanaged.passUnretained(self).toOpaque()
 
@@ -33,7 +37,7 @@ final class InputMonitor {
             },
             userInfo: pointer
         ) else {
-            log("tapCreate failed (Accessibility permission missing or revoked)")
+            log("tapCreate FAILED (Accessibility permission missing or revoked)")
             return false
         }
 
@@ -71,7 +75,8 @@ final class InputMonitor {
         let codepointStr = typed
             .map { String(format: "U+%04X", $0.unicodeScalars.first?.value ?? 0) }
             .joined(separator: ",")
-        log("keyDown keycode=\(keycode) chars='\(typed.map(String.init).joined())' cp=\(codepointStr)")
+        let charsStr = typed.map(String.init).joined()
+        log("keyDown keycode=\(keycode) chars='\(charsStr)' cp=\(codepointStr)")
 
         let exceptions = exceptionWords()
 
@@ -139,6 +144,7 @@ final class InputMonitor {
     }
 
     private func log(_ message: String) {
-        NSLog("%@", "[Ttae][InputMonitor] \(message)" as NSString)
+        Self.logger.info("\(message, privacy: .public)")
+        print("[Ttae][InputMonitor] \(message)")
     }
 }
