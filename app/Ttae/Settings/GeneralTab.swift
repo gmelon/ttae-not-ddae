@@ -1,9 +1,11 @@
 import SwiftUI
 
 struct GeneralTab: View {
-    @EnvironmentObject var state: AppState
+    @Environment(AppState.self) private var state
 
     var body: some View {
+        @Bindable var state = state
+
         Form {
             Section {
                 Toggle("자동 교정 사용", isOn: $state.correctionEnabled)

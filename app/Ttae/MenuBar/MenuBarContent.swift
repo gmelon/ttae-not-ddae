@@ -2,16 +2,21 @@ import AppKit
 import SwiftUI
 
 struct MenuBarPopover: View {
-    @EnvironmentObject var state: AppState
+    @Environment(AppState.self) private var state
     @Environment(\.openSettings) private var openSettings
 
     var body: some View {
+        @Bindable var state = state
+
         VStack(spacing: 0) {
             header
             counter
 
             softDivider
-            toggleRow
+            Toggle("자동 교정", isOn: $state.correctionEnabled)
+                .toggleStyle(.switch)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
 
             if !state.hasAccessibilityPermission {
                 softDivider
@@ -61,13 +66,6 @@ struct MenuBarPopover: View {
         }
         .padding(.horizontal, 14)
         .padding(.bottom, 12)
-    }
-
-    private var toggleRow: some View {
-        Toggle("자동 교정", isOn: $state.correctionEnabled)
-            .toggleStyle(.switch)
-            .padding(.horizontal, 14)
-            .padding(.vertical, 10)
     }
 
     private var permissionBanner: some View {

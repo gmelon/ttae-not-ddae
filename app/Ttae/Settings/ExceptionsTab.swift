@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ExceptionsTab: View {
-    @EnvironmentObject var state: AppState
+    @Environment(AppState.self) private var state
     @State private var newWord: String = ""
     @State private var selection = Set<String>()
     @FocusState private var inputFocused: Bool

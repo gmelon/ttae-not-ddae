@@ -3,12 +3,14 @@ import SwiftUI
 @main
 struct TtaeApp: App {
     @NSApplicationDelegateAdaptor private var appDelegate: AppDelegate
-    @StateObject private var state = AppState()
+    @State private var state = AppState()
 
     var body: some Scene {
+        @Bindable var state = state
+
         MenuBarExtra(isInserted: $state.menuBarIconVisible) {
             MenuBarPopover()
-                .environmentObject(state)
+                .environment(state)
         } label: {
             Image("Logo")
                 .renderingMode(.template)
@@ -18,7 +20,7 @@ struct TtaeApp: App {
 
         Settings {
             SettingsView()
-                .environmentObject(state)
+                .environment(state)
                 .frame(width: 540, height: 460)
         }
     }
