@@ -8,7 +8,8 @@ import SwiftUI
 /// SwiftUI 의 `Settings` scene 은 macOS 14+ 의 LSUIElement 상태에서 reopen 시
 /// `showSettingsWindow:` 액션이 통과되어도 윈도우를 만들어주지 않는 quirk 가 있어,
 /// 직접 NSWindow + NSHostingController 로 환경설정 창을 관리한다. 메뉴바의
-/// 환경설정 버튼도 같은 진입점을 사용한다.
+/// 환경설정 버튼도 같은 진입점을 사용한다. NSToolbar 로 macOS Settings 스타일의
+/// 상단 탭을 구성하고, 클릭 시 SettingsRouter 로 SwiftUI 본문을 전환한다.
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var settingsWindow: NSWindow?
 
@@ -27,8 +28,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             createSettingsWindow()
         }
 
-        // .accessory(LSUIElement) 상태에선 활성화가 막힐 수 있어 일단 .regular 로.
-        // 창이 닫히면 windowWillClose 에서 다시 .accessory 로 복귀해 Dock 아이콘 제거.
         NSApp.setActivationPolicy(.regular)
         NSApp.activate(ignoringOtherApps: true)
 
@@ -48,8 +47,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let window = NSWindow(contentViewController: host)
         window.title = "환경설정"
         window.styleMask = [.titled, .closable, .miniaturizable]
+        window.toolbarStyle = .preference
         window.isReleasedWhenClosed = false
         window.delegate = self
+
+        let toolbar = NSToolbar(identifier: "dev.gmelon.ttae.settings")
+        toolbar.delegate = self
+        toolbar.displayMode = .iconAndLabel
+        toolbar.allowsUserCustomization = false
+        toolbar.autosavesConfiguration = false
+        toolbar.selectedItemIdentifier = SettingsTab.general.toolbarIdentifier
+        window.toolbar = toolbar
+
         settingsWindow = window
     }
 }
@@ -58,6 +67,44 @@ extension AppDelegate: NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             NSApp.setActivationPolicy(.accessory)
+        }
+    }
+}
+
+extension AppDelegate: NSToolbarDelegate {
+    func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        SettingsTab.allCases.map(\.toolbarIdentifier)
+    }
+
+    func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        toolbarDefaultItemIdentifiers(toolbar)
+    }
+
+    func toolbarSelectableItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+        toolbarDefaultItemIdentifiers(toolbar)
+    }
+
+    func toolbar(
+        _ toolbar: NSToolbar,
+        itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier,
+        willBeInsertedIntoToolbar flag: Bool
+    ) -> NSToolbarItem? {
+        guard let tab = SettingsTab(toolbarIdentifier: itemIdentifier) else { return nil }
+        let item = NSToolbarItem(itemIdentifier: itemIdentifier)
+        item.label = tab.title
+        item.image = NSImage(
+            systemSymbolName: tab.systemIcon,
+            accessibilityDescription: tab.title
+        )
+        item.action = #selector(toolbarItemClicked(_:))
+        item.target = self
+        return item
+    }
+
+    @MainActor
+    @objc private func toolbarItemClicked(_ sender: NSToolbarItem) {
+        if let tab = SettingsTab(toolbarIdentifier: sender.itemIdentifier) {
+            SettingsRouter.shared.selectedTab = tab
         }
     }
 }
