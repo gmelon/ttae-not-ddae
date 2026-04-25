@@ -6,7 +6,7 @@ interface Props {
 }
 
 const {
-  title = "떄가아니라때 — 맥에서 한글 오타를 자동으로 교정",
+  title = "떄 가 아니라 때 — 세상에 떄 라는 글자는 없다",
   description = "Shift 를 모음까지 눌러 생기는 떄·꺠·뺴·쨰 같은 한글 오타를 입력 즉시 올바른 글자로 바꿔주는 macOS 메뉴바 앱.",
   canonical,
 } = Astro.props;
@@ -31,14 +31,14 @@ const ogImage = `${siteUrl}/logo.png`;
     <meta name="author" content="gmelon" />
     <link rel="canonical" href={canonicalUrl} />
 
-    <meta name="theme-color" content="#fafaf6" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="generator" content={Astro.generator} />
 
     <link rel="icon" type="image/png" href="/logo_transparent.png" />
     <link rel="apple-touch-icon" href="/logo.png" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="떄가아니라때" />
+    <meta property="og:site_name" content="떄 가 아니라 때" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
@@ -60,7 +60,7 @@ const ogImage = `${siteUrl}/logo.png`;
       set:html={JSON.stringify({
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
-        name: "떄가아니라때",
+        name: "떄 가 아니라 때",
         applicationCategory: "UtilitiesApplication",
         operatingSystem: "macOS 14+",
         url: siteUrl,
@@ -88,9 +88,9 @@ const ogImage = `${siteUrl}/logo.png`;
       :root {
         color-scheme: light;
 
-        --bg: #fafaf6;
-        --bg-elev: #ffffff;
-        --bg-elev-2: #f3f1eb;
+        --bg: #ffffff;
+        --bg-elev: #fafafa;
+        --bg-elev-2: #f3f3f3;
         --border: rgba(15, 15, 18, 0.08);
         --border-strong: rgba(15, 15, 18, 0.14);
 
@@ -98,9 +98,12 @@ const ogImage = `${siteUrl}/logo.png`;
         --text-muted: #55555a;
         --text-dim: #8a8a90;
 
-        --accent: #dc2626;
-        --accent-hover: #b91c1c;
-        --accent-soft: rgba(220, 38, 38, 0.08);
+        --accent: #2c8a5a;
+        --accent-hover: #226c45;
+        --accent-soft: rgba(44, 138, 90, 0.10);
+        --accent-shadow: rgba(44, 138, 90, 0.22);
+
+        --strike: #dc2626;
 
         --radius-sm: 8px;
         --radius: 14px;
@@ -135,13 +138,6 @@ const ogImage = `${siteUrl}/logo.png`;
         line-height: 1.65;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
-        background-image:
-          radial-gradient(
-            ellipse 900px 460px at 50% -120px,
-            rgba(255, 196, 178, 0.45),
-            transparent 60%
-          );
-        background-attachment: fixed;
       }
 
       a {
@@ -180,7 +176,7 @@ const ogImage = `${siteUrl}/logo.png`;
         right: -6%;
         top: 52%;
         height: 2px;
-        background: var(--accent);
+        background: var(--strike);
         transform: rotate(-7deg);
         border-radius: 2px;
       }

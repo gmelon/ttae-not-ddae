@@ -1,11 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import {
+  getDmgDownloadUrl,
+  getReleasesPageUrl,
+  getRepoUrl,
+} from "../lib/version";
 
-const releaseUrl =
-  "https://github.com/gmelon/ttae-not-ddae/releases/latest";
-const dmgUrl =
-  "https://github.com/gmelon/ttae-not-ddae/releases/latest/download/Ttae-1.0.0.dmg";
-const repoUrl = "https://github.com/gmelon/ttae-not-ddae";
+const releaseUrl = getReleasesPageUrl();
+const dmgUrl = getDmgDownloadUrl();
+const repoUrl = getRepoUrl();
 
 const mappings: { wrong: string; right: string }[] = [
   { wrong: "떄", right: "때" },
@@ -20,49 +23,49 @@ const mappings: { wrong: string; right: string }[] = [
   { wrong: "쪠", right: "쩨" },
 ];
 
-const features = [
+const features: { title: string; body: string }[] = [
   {
-    title: "쳤다 싶은 순간 이미 교정",
-    body: "음절이 완성되는 순간 backspace 와 올바른 글자가 자동으로 들어갑니다. 평소 타이핑 흐름을 끊지 않아요.",
+    title: "치는 순간 자동 교정",
+    body: "잘못된 문자를 인식하는 순간, <strong>자동으로 교정이 수행됩니다.</strong> 타이핑 흐름을 방해하지 않아요.",
   },
   {
     title: "한글 입력일 때만 동작",
-    body: "현재 입력 소스가 한국어 두벌식일 때만 작동합니다. 영문이나 코드 작성 중에는 끼어들지 않아요.",
+    body: "<strong>한국어 두벌식</strong>일 때만 작동합니다. 영문이나 코드 작성 중에는 끼어들지 않아요.",
   },
   {
-    title: "조용한 메뉴바 앱",
-    body: "Dock 에 뜨지 않습니다. 메뉴바 한 칸에서 누적 교정 횟수, 자동 교정 토글, 예외 단어 관리만 보여주는 단순한 UI 입니다.",
+    title: "백그라운드에서 가볍게 동작",
+    body: "Dock 에 뜨지 않고, <strong>메뉴바에서도 숨김 처리</strong> 할 수 있습니다.",
   },
   {
     title: "오픈소스라서 안심",
-    body: "MIT 라이선스로 코드 전체가 GitHub 에 공개되어 있습니다. 키 입력을 다루는 앱인 만큼 직접 들여다보실 수 있고, 어디로도 데이터를 보내지 않는다는 사실도 그 코드 안에서 확인하실 수 있어요.",
+    body: "코드 전체가 <strong>GitHub 에 공개</strong>되어 있습니다. 키 입력을 다루는 앱인 만큼 직접 들여다보실 수 있고, <strong>어디로도 데이터를 보내지 않는다</strong>는 사실도 그 코드 안에서 확인하실 수 있어요.",
   },
 ];
 
-const faqs = [
+const faqs: { q: string; a: string }[] = [
   {
     q: "정확히 어떤 글자가 교정되나요?",
-    a: "쌍자음(ㄲ ㄸ ㅃ ㅆ ㅉ) 과 이중모음(ㅒ ㅖ) 이 결합된 10개의 음절뿐입니다. 위의 매핑표 그대로이고, 그 외 글자는 절대 건드리지 않아요.",
+    a: "쌍자음(ㄲ ㄸ ㅃ ㅆ ㅉ) 과 이중모음(ㅒ ㅖ) 이 결합된 <strong>10개의 음절뿐</strong>입니다. 위의 매핑표 그대로이고, <strong>그 외 글자는 절대 건드리지 않아요.</strong>",
   },
   {
     q: "왜 손쉬운 사용 권한이 필요한가요?",
-    a: "잘못된 글자를 감지하고 올바른 글자로 다시 입력하려면 시스템의 손쉬운 사용(Accessibility) 권한이 필요합니다. 시스템 설정 > 개인 정보 보호 및 보안 > 손쉬운 사용 에서 부여하실 수 있어요.",
+    a: "잘못된 글자를 감지하고 올바른 글자로 다시 입력하려면 시스템의 <strong>손쉬운 사용(Accessibility) 권한</strong>이 필요합니다. <strong>시스템 설정 > 개인 정보 보호 및 보안 > 손쉬운 사용</strong> 에서 켜주시면 됩니다.",
   },
   {
     q: "키보드 입력이 어딘가로 전송되나요?",
-    a: "아니요. 모든 처리는 로컬에서만 일어납니다. 외부 통신, 분석 도구, 서버 전송 같은 코드는 단 한 줄도 없으며, 코드 전체가 GitHub 에 공개되어 있어 직접 확인하실 수 있어요.",
+    a: "<strong>아니요.</strong> 모든 처리는 컴퓨터 안에서만 일어납니다. <strong>외부로 보내는 코드는 단 한 줄도 없으며,</strong> 코드 전체가 GitHub 에 공개되어 있어 직접 확인하실 수 있어요.",
   },
   {
     q: "두벌식이 아닌 다른 한글 자판도 지원하나요?",
-    a: "현재는 두벌식 표준 자판만 지원합니다. 세벌식 등 다른 자판은 키 매핑이 달라 추후 별도 작업이 필요해요.",
+    a: "현재는 <strong>두벌식 표준 자판</strong>만 지원합니다. 세벌식 등 다른 자판은 키 위치가 달라 추후 별도 작업이 필요해요.",
   },
   {
     q: "특정 단어는 교정에서 제외하고 싶어요.",
-    a: "환경설정 > 예외 단어 탭에서 단어를 추가하면 교정 대상에서 빠집니다.",
+    a: "<strong>환경설정 > 예외 단어</strong> 탭에서 단어를 추가하면 <strong>교정 대상에서 빠집니다.</strong>",
   },
   {
     q: "어떤 macOS 버전에서 동작하나요?",
-    a: "macOS 14 (Sonoma) 이상에서 동작합니다.",
+    a: "<strong>macOS 14 (Sonoma) 이상</strong>에서 동작합니다.",
   },
 ];
 ---
@@ -70,17 +73,30 @@ const faqs = [
 <Layout>
   <header class="nav">
     <div class="container nav-row">
-      <a href="/" class="brand" aria-label="떄가아니라때 홈">
+      <a href="/" class="brand" aria-label="떄 가 아니라 때 홈">
         <img src="/logo_transparent.png" alt="" width="26" height="26" />
         <span class="brand-text">
-          <span class="strike-wrong">떄</span><span class="brand-tail"
-            >가 아니라 </span
-          ><span class="right-glyph">때</span>
+          <span class="strike-wrong">떄</span>
+          <span class="brand-tail">가 아니라</span>
+          <span class="right-glyph">때</span>
         </span>
       </a>
       <nav class="nav-links">
         <a href={repoUrl} target="_blank" rel="noopener">GitHub</a>
-        <a href={dmgUrl} class="nav-cta">다운로드</a>
+        <a href={dmgUrl} class="nav-cta">
+          <svg
+            class="apple-mark"
+            viewBox="0 0 384 512"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              fill="currentColor"
+              d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7-56.6.9-116.5 44.2-116.5 132.3 0 26 4.8 52.9 14.4 80.6 12.8 36.4 58.9 125.7 107 124.2 25.1-.6 42.8-17.9 75.5-17.9 31.7 0 48.1 17.9 76.1 17.9 48.5-.7 90.2-81.9 102.4-118.4-65.1-30.7-59.3-90-59.3-90.3zm-56.3-156.8c27.1-32.2 24.6-61.5 23.8-72-23.9 1.4-51.6 16.3-67.4 34.6-17.4 19.7-27.6 44-25.4 71.4 25.9 2 49.5-11.2 69-34z"
+            ></path>
+          </svg>
+          <span>macOS 다운로드</span>
+        </a>
       </nav>
     </div>
   </header>
@@ -91,23 +107,34 @@ const faqs = [
         <h1 class="hero-title">
           세상에<br />
           <span class="hero-line"
-            ><span class="strike-wrong">떄</span> 라는 말은</span
+            ><span class="strike-wrong">떄</span> 라는 글자는</span
           ><br />
           <span class="hero-emph">없다.</span>
         </h1>
 
         <p class="hero-sub">
-          분명 '때' 라고 쳤는데 화면엔 '떄'.<br class="break-md" />
-          빠르게 칠수록 Shift 가 모음까지 따라옵니다.<br
-            class="break-md"
-          />
-          찍히는 순간, 알아서 바꿔드릴게요.
+          떄. 꺠. 뺴. 쨰.<br class="break-md" />
+          빠르게 타이핑하다보면 한 번쯤 보게되죠.<br class="break-md" />
+          이 앱이 자동으로 교정해드립니다.
         </p>
 
         <div class="cta-row">
-          <a href={dmgUrl} class="btn btn-primary">
-            <span class="btn-arrow" aria-hidden="true">↓</span>
-            <span>지금 다운로드</span>
+          <a href={dmgUrl} class="btn btn-primary btn-stack">
+            <svg
+              class="apple-mark apple-mark-lg"
+              viewBox="0 0 384 512"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                fill="currentColor"
+                d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7-56.6.9-116.5 44.2-116.5 132.3 0 26 4.8 52.9 14.4 80.6 12.8 36.4 58.9 125.7 107 124.2 25.1-.6 42.8-17.9 75.5-17.9 31.7 0 48.1 17.9 76.1 17.9 48.5-.7 90.2-81.9 102.4-118.4-65.1-30.7-59.3-90-59.3-90.3zm-56.3-156.8c27.1-32.2 24.6-61.5 23.8-72-23.9 1.4-51.6 16.3-67.4 34.6-17.4 19.7-27.6 44-25.4 71.4 25.9 2 49.5-11.2 69-34z"
+              ></path>
+            </svg>
+            <span class="btn-stack-text">
+              <span class="btn-main">지금 다운로드</span>
+              <span class="btn-sub">macOS 14+</span>
+            </span>
           </a>
           <a
             href={repoUrl}
@@ -120,13 +147,10 @@ const faqs = [
         <div class="hero-demo" aria-hidden="true">
           <div class="demo-pair">
             <span class="demo-glyph wrong"
-              ><span class="strike-wrong">쨰</span></span
+              ><span class="strike-wrong">떄</span></span
             >
             <span class="demo-arrow">→</span>
-            <span class="demo-glyph right">째</span>
-          </div>
-          <div class="demo-caption">
-            ㅉ + Shift + ㅒ 가 떨어진 결과
+            <span class="demo-glyph right">때</span>
           </div>
         </div>
       </div>
@@ -135,23 +159,14 @@ const faqs = [
     <section class="section">
       <div class="container">
         <h2 class="section-title">
-          사실 이런 글자들은,<br />
-          <span class="hl">한국어에 없습니다.</span>
+          이런 글자들은 <span class="hl">사전 어디에도 없습니다.</span>
         </h2>
         <div class="explainer">
           <p>
-            표준국어대사전, 우리말샘 어디를 뒤져도 떄·꺠·뺴·쨰 같은 단어는 등장하지 않습니다.
-            한국어에서 <strong>쌍자음(ㄲ ㄸ ㅃ ㅆ ㅉ)</strong> 은 이중모음
-            (ㅑ ㅕ ㅛ ㅠ ㅒ ㅖ) 과 만나지 않거든요.
-            ㅏ, ㅓ, ㅗ, ㅜ 같은 단모음하고만 결합합니다.
-          </p>
-          <p>
-            즉 위 글자들은 유니코드에는 자리를 차지하고 있지만, 실제 단어에는 단 하나도
-            등장하지 않습니다. 사실상 100% Shift 를 모음까지 누른 결과의 오타라는 뜻이고요.
-          </p>
-          <p class="explainer-tail">
-            그래서 떄가아니라때는 그 패턴이 보이면 곧장 고칩니다. 사전을 뒤질 필요도, 문맥을
-            살필 필요도 없는 — 답이 정해진 오타니까요.
+            표준국어대사전, 우리말샘 어디에도 떄·꺠·뺴·쨰 같은 단어는 없습니다.
+            한국어에서 <strong>쌍자음(ㄲ ㄸ ㅃ ㅆ ㅉ)</strong> 이 이중모음
+            (ㅑ ㅕ ㅛ ㅠ ㅒ ㅖ) 과 결합한 단어는 사전에 거의 없거든요. 거의 모두
+            ㅏ, ㅓ, ㅗ, ㅜ 같은 단모음과 결합한 형태입니다.
           </p>
         </div>
       </div>
@@ -159,10 +174,7 @@ const faqs = [
 
     <section class="section section-table">
       <div class="container">
-        <h2 class="section-title">이런 10개가 자동으로 바뀝니다</h2>
-        <p class="section-sub">
-          앱이 손대는 모든 케이스. 그 외에는 아무것도 건드리지 않습니다.
-        </p>
+        <h2 class="section-title">아래 10개의 오타를 자동으로 수정합니다</h2>
 
         <div class="mapping-grid">
           {
@@ -190,7 +202,7 @@ const faqs = [
             features.map(({ title, body }) => (
               <div class="feature">
                 <h3 class="feature-title">{title}</h3>
-                <p class="feature-body">{body}</p>
+                <p class="feature-body" set:html={body} />
               </div>
             ))
           }
@@ -200,25 +212,38 @@ const faqs = [
 
     <section class="section section-download">
       <div class="container download-card">
-        <div>
+        <div class="download-info">
           <h2 class="download-title">설치하기</h2>
           <ol class="install-steps">
-            <li>아래 .dmg 다운로드</li>
+            <li>.dmg 다운로드</li>
             <li>
-              더블클릭으로 마운트, <code>Ttae.app</code> 을 Applications 폴더로 드래그
+              더블 클릭 후, <code>Ttae.app</code> 을 Applications 폴더로 드래그
             </li>
             <li>
-              처음 실행 시 시스템 설정 &gt; 개인 정보 보호 및 보안 &gt; 손쉬운 사용 에서 권한 부여
+              처음 실행 시 시스템 설정 &gt; 개인 정보 보호 및 보안 &gt; 손쉬운 사용 켜주기
             </li>
           </ol>
         </div>
         <div class="download-actions">
-          <a href={dmgUrl} class="btn btn-primary btn-lg">
-            <span class="btn-arrow" aria-hidden="true">↓</span>
-            <span>지금 다운로드</span>
+          <a href={dmgUrl} class="btn btn-primary btn-lg btn-stack">
+            <svg
+              class="apple-mark apple-mark-lg"
+              viewBox="0 0 384 512"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                fill="currentColor"
+                d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7-56.6.9-116.5 44.2-116.5 132.3 0 26 4.8 52.9 14.4 80.6 12.8 36.4 58.9 125.7 107 124.2 25.1-.6 42.8-17.9 75.5-17.9 31.7 0 48.1 17.9 76.1 17.9 48.5-.7 90.2-81.9 102.4-118.4-65.1-30.7-59.3-90-59.3-90.3zm-56.3-156.8c27.1-32.2 24.6-61.5 23.8-72-23.9 1.4-51.6 16.3-67.4 34.6-17.4 19.7-27.6 44-25.4 71.4 25.9 2 49.5-11.2 69-34z"
+              ></path>
+            </svg>
+            <span class="btn-stack-text">
+              <span class="btn-main">지금 다운로드</span>
+              <span class="btn-sub">macOS 14+</span>
+            </span>
           </a>
           <a href={releaseUrl} target="_blank" rel="noopener" class="btn-link">
-            전체 릴리스 노트 보기
+            전체 릴리즈 노트 보기
           </a>
         </div>
       </div>
@@ -232,7 +257,7 @@ const faqs = [
             faqs.map(({ q, a }) => (
               <details class="faq">
                 <summary>{q}</summary>
-                <p>{a}</p>
+                <p set:html={a} />
               </details>
             ))
           }
@@ -244,9 +269,9 @@ const faqs = [
   <footer class="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="strike-wrong">떄</span><span class="brand-tail"
-          >가 아니라 </span
-        ><span class="right-glyph">때</span>
+        <span class="strike-wrong">떄</span>
+        <span class="brand-tail">가 아니라</span>
+        <span class="right-glyph">때</span>
       </div>
       <div class="footer-links">
         <a href={repoUrl} target="_blank" rel="noopener">GitHub</a>
@@ -291,7 +316,7 @@ const faqs = [
   .brand-text {
     display: inline-flex;
     align-items: baseline;
-    gap: 0;
+    gap: 0.32em;
   }
   .brand-tail {
     color: var(--text-muted);
@@ -315,12 +340,16 @@ const faqs = [
     color: var(--text);
   }
   .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
     color: #fff !important;
     background: var(--accent);
     border: 1px solid var(--accent);
   }
   .nav-cta:hover {
     background: var(--accent-hover) !important;
+    border-color: var(--accent-hover);
   }
 
   .hero {
@@ -390,7 +419,7 @@ const faqs = [
     background: var(--accent);
     color: #fff;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4) inset,
-      0 4px 14px rgba(220, 38, 38, 0.22);
+      0 4px 14px var(--accent-shadow);
   }
   .btn-primary:hover {
     background: var(--accent-hover);
@@ -403,9 +432,36 @@ const faqs = [
   .btn-ghost:hover {
     border-color: var(--border-strong);
   }
-  .btn-arrow {
-    font-size: 13px;
-    opacity: 0.92;
+  .apple-mark {
+    width: 0.95em;
+    height: 1.05em;
+    transform: translateY(-1px);
+    flex-shrink: 0;
+  }
+  .apple-mark-lg {
+    width: 1.4em;
+    height: 1.55em;
+    transform: translateY(-1px);
+  }
+  .btn-stack {
+    padding: 12px 22px;
+    gap: 12px;
+  }
+  .btn-stack-text {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1.2;
+  }
+  .btn-main {
+    font-size: 15.5px;
+    font-weight: 600;
+  }
+  .btn-sub {
+    font-size: 11.5px;
+    font-weight: 500;
+    opacity: 0.85;
+    letter-spacing: 0.01em;
   }
   .btn-lg {
     padding: 15px 26px;
@@ -414,7 +470,7 @@ const faqs = [
 
   .hero-demo {
     margin-top: 28px;
-    padding: 28px 22px 22px;
+    padding: 30px 22px;
     background: var(--bg-elev);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -494,13 +550,6 @@ const faqs = [
     color: var(--text);
     font-weight: 600;
   }
-  .explainer-tail {
-    color: var(--text);
-    border-top: 1px solid var(--border);
-    padding-top: 14px;
-    margin-top: 4px;
-    font-weight: 500;
-  }
 
   .mapping-grid {
     display: grid;
@@ -570,6 +619,10 @@ const faqs = [
     font-size: 15px;
     line-height: 1.65;
   }
+  .feature-body strong {
+    color: var(--text);
+    font-weight: 600;
+  }
 
   .section-download {
     padding-top: 40px;
@@ -577,8 +630,8 @@ const faqs = [
   .download-card {
     background: linear-gradient(
       180deg,
-      rgba(220, 38, 38, 0.06),
-      rgba(220, 38, 38, 0.015) 60%,
+      var(--accent-soft),
+      rgba(44, 138, 90, 0.02) 60%,
       var(--bg-elev) 100%
     );
     border: 1px solid var(--border-strong);
@@ -589,11 +642,11 @@ const faqs = [
     gap: 24px;
     align-items: center;
     box-shadow: 0 1px 2px rgba(15, 15, 18, 0.04),
-      0 16px 40px rgba(220, 38, 38, 0.06);
+      0 16px 40px rgba(44, 138, 90, 0.08);
   }
   @media (min-width: 760px) {
     .download-card {
-      grid-template-columns: 1.4fr 1fr;
+      grid-template-columns: 1fr auto;
     }
   }
   .download-title {
@@ -620,13 +673,8 @@ const faqs = [
   .download-actions {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
-  }
-  @media (min-width: 760px) {
-    .download-actions {
-      align-items: flex-end;
-    }
   }
   .btn-link {
     color: var(--text-muted);
@@ -688,6 +736,10 @@ const faqs = [
     font-size: 15px;
     line-height: 1.7;
   }
+  .faq p strong {
+    color: var(--text);
+    font-weight: 600;
+  }
 
   .footer {
     border-top: 1px solid var(--border);
@@ -706,6 +758,7 @@ const faqs = [
   .footer-brand {
     display: inline-flex;
     align-items: baseline;
+    gap: 0.32em;
     font-size: 14px;
     font-weight: 500;
   }
