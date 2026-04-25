@@ -24,18 +24,21 @@ jobs:
         with:
           xcode-version: latest-stable
 
-      - name: Resolve version from VERSION file
+      - name: Resolve version from project.yml
         id: version
         working-directory: .
         run: |
           set -euo pipefail
-          if [ ! -f VERSION ]; then
-            echo "::error::VERSION file not found at repo root."
+          PROJECT_YML="app/project.yml"
+          if [ ! -f "$PROJECT_YML" ]; then
+            echo "::error::$PROJECT_YML not found."
             exit 1
           fi
-          VERSION=$(tr -d '[:space:]' < VERSION)
+          VERSION=$(grep -E '^[[:space:]]*MARKETING_VERSION:' "$PROJECT_YML" \
+            | head -1 \
+            | sed -E 's/.*"([^"]+)".*/\1/')
           if [ -z "$VERSION" ]; then
-            echo "::error::VERSION is empty."
+            echo "::error::Could not parse MARKETING_VERSION from $PROJECT_YML."
             exit 1
           fi
           TAG="v$VERSION"
@@ -45,7 +48,7 @@ jobs:
           echo "dmg=$DMG"         >> "$GITHUB_OUTPUT"
 
           if git rev-parse "refs/tags/$TAG" >/dev/null 2>&1; then
-            echo "::notice::Tag $TAG already exists. Bump VERSION to publish a new release. Skipping release steps."
+            echo "::notice::Tag $TAG already exists. Bump MARKETING_VERSION in app/project.yml to publish a new release. Skipping release steps."
             echo "skip=true"  >> "$GITHUB_OUTPUT"
           else
             echo "skip=false" >> "$GITHUB_OUTPUT"
