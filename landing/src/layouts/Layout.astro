@@ -7,7 +7,7 @@ interface Props {
 
 const {
   title = "떄가아니라때 — 맥에서 한글 오타를 자동으로 교정",
-  description = "Shift 를 모음까지 눌러 생기는 떄·꺠·뺴·쨰 같은 한글 오타를 입력 즉시 올바른 음절로 바꿔주는 macOS 메뉴바 앱.",
+  description = "Shift 를 모음까지 눌러 생기는 떄·꺠·뺴·쨰 같은 한글 오타를 입력 즉시 올바른 글자로 바꿔주는 macOS 메뉴바 앱.",
   canonical,
 } = Astro.props;
 
@@ -26,12 +26,12 @@ const ogImage = `${siteUrl}/logo.png`;
     <meta name="description" content={description} />
     <meta
       name="keywords"
-      content="맥 한글 오타 자동 수정, 맥 한글 오타 교정, 한글 떄 쨰 꺠 뺴, macOS 한글 교정, 맥 한글 오타 수정기, 떄가아니라때, 맥 메뉴바 앱, Korean typo fixer macOS"
+      content="맥 한글 오타 자동 수정, 맥 한글 오타 교정, 한글 떄 쨰 꺠 뺴, macOS 한글 교정, 맥 한글 오타 수정기, 떄가아니라때, 맥 메뉴바 앱"
     />
     <meta name="author" content="gmelon" />
     <link rel="canonical" href={canonicalUrl} />
 
-    <meta name="theme-color" content="#0b0b10" />
+    <meta name="theme-color" content="#fafaf6" />
     <meta name="generator" content={Astro.generator} />
 
     <link rel="icon" type="image/png" href="/logo_transparent.png" />
@@ -51,17 +51,8 @@ const ogImage = `${siteUrl}/logo.png`;
     <meta name="twitter:image" content={ogImage} />
 
     <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-    />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap"
       rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
     />
 
     <script
@@ -95,21 +86,21 @@ const ogImage = `${siteUrl}/logo.png`;
     <slot />
     <style is:global>
       :root {
-        color-scheme: dark;
+        color-scheme: light;
 
-        --bg: #0b0b10;
-        --bg-elev: #14141c;
-        --bg-elev-2: #1c1c26;
-        --border: rgba(255, 255, 255, 0.08);
-        --border-strong: rgba(255, 255, 255, 0.16);
+        --bg: #fafaf6;
+        --bg-elev: #ffffff;
+        --bg-elev-2: #f3f1eb;
+        --border: rgba(15, 15, 18, 0.08);
+        --border-strong: rgba(15, 15, 18, 0.14);
 
-        --text: #f4f4f6;
-        --text-muted: #a8a8b3;
-        --text-dim: #6c6c7a;
+        --text: #0f0f12;
+        --text-muted: #55555a;
+        --text-dim: #8a8a90;
 
-        --accent: #ff5a5f;
-        --accent-soft: rgba(255, 90, 95, 0.12);
-        --good: #5cd2a1;
+        --accent: #dc2626;
+        --accent-hover: #b91c1c;
+        --accent-soft: rgba(220, 38, 38, 0.08);
 
         --radius-sm: 8px;
         --radius: 14px;
@@ -132,27 +123,23 @@ const ogImage = `${siteUrl}/logo.png`;
         background: var(--bg);
         color: var(--text);
         font-family:
-          "Pretendard",
+          "Pretendard Variable",
+          Pretendard,
           -apple-system,
           BlinkMacSystemFont,
           "Apple SD Gothic Neo",
-          "Segoe UI",
-          Roboto,
+          system-ui,
           sans-serif;
-        font-size: 16px;
+        font-size: 16.5px;
+        font-weight: 400;
         line-height: 1.65;
         -webkit-font-smoothing: antialiased;
         text-rendering: optimizeLegibility;
         background-image:
           radial-gradient(
-            ellipse 60% 40% at 50% 0%,
-            rgba(255, 90, 95, 0.18),
-            transparent 70%
-          ),
-          radial-gradient(
-            ellipse 80% 60% at 50% 100%,
-            rgba(92, 210, 161, 0.06),
-            transparent 70%
+            ellipse 900px 460px at 50% -120px,
+            rgba(255, 196, 178, 0.45),
+            transparent 60%
           );
         background-attachment: fixed;
       }
@@ -166,8 +153,9 @@ const ogImage = `${siteUrl}/logo.png`;
       h2,
       h3 {
         margin: 0;
-        line-height: 1.2;
-        letter-spacing: -0.02em;
+        line-height: 1.15;
+        letter-spacing: -0.022em;
+        font-weight: 600;
       }
 
       p {
@@ -181,11 +169,6 @@ const ogImage = `${siteUrl}/logo.png`;
         padding: 0 24px;
       }
 
-      .mono {
-        font-family: "JetBrains Mono", ui-monospace, SFMono-Regular,
-          Menlo, monospace;
-      }
-
       .strike-wrong {
         position: relative;
         color: var(--text-dim);
@@ -193,12 +176,12 @@ const ogImage = `${siteUrl}/logo.png`;
       .strike-wrong::after {
         content: "";
         position: absolute;
-        left: -4%;
-        right: -4%;
+        left: -6%;
+        right: -6%;
         top: 52%;
         height: 2px;
         background: var(--accent);
-        transform: rotate(-6deg);
+        transform: rotate(-7deg);
         border-radius: 2px;
       }
 
@@ -208,7 +191,7 @@ const ogImage = `${siteUrl}/logo.png`;
 
       @media (max-width: 640px) {
         body {
-          font-size: 15px;
+          font-size: 15.5px;
         }
       }
     </style>
