@@ -105,7 +105,7 @@ struct MenuBarPopover: View {
     private var footer: some View {
         HStack(spacing: 0) {
             footerButton(title: "환경설정", icon: "settings", shortcut: ",") {
-                (NSApp.delegate as? AppDelegate)?.showSettings()
+                AppDelegate.shared?.showSettings()
             }
             .frame(maxWidth: .infinity)
 
