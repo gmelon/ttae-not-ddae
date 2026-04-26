@@ -6,7 +6,7 @@ interface Props {
 }
 
 const {
-  title = "떄 가 아니라 때 — 세상에 떄 라는 글자는 없다",
+  title = "떄 가 아니라 때 — 맥 한글 오타 자동 교정",
   description = "맥에서 한글 오타 자동 교정. 빠르게 칠 때 생기는 떄·꺠·뺴·쨰 같은 글자를 입력 즉시 바꿔주는 macOS 메뉴바 앱입니다.",
   canonical,
 } = Astro.props;
@@ -183,6 +183,18 @@ const ogImage = `${siteUrl}/logo.png`;
 
       .right-glyph {
         color: var(--text);
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
       }
 
       @media (max-width: 640px) {

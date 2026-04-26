@@ -62,6 +62,10 @@ const faqs: { q: string; a: string }[] = [
     a: "<strong>아니요.</strong> 모든 처리는 컴퓨터 안에서만 일어납니다. <strong>외부로 보내는 코드는 단 한 줄도 없으며,</strong> 코드 전체가 GitHub 에 공개되어 있어 직접 확인하실 수 있어요.",
   },
   {
+    q: "무료인가요?",
+    a: "<strong>네, 완전히 무료입니다.</strong> 광고나 결제, 인앱 구매가 전혀 없어요. <strong>MIT 라이선스의 오픈소스</strong>라 자유롭게 사용하실 수 있습니다.",
+  },
+  {
     q: "두벌식이 아닌 다른 한글 자판도 지원하나요?",
     a: "현재는 <strong>두벌식 표준 자판</strong>만 지원합니다. 세벌식 등 다른 자판은 키 위치가 달라 추후 별도 작업이 필요해요.",
   },
@@ -93,7 +97,12 @@ const faqSchema = {
   <header class="nav">
     <div class="container nav-row">
       <a href="/" class="brand" aria-label="떄 가 아니라 때 홈">
-        <img src="/logo_transparent.png" alt="" width="26" height="26" />
+        <img
+          src="/logo_transparent.png"
+          alt="떄 가 아니라 때 — 맥 한글 오타 자동 교정"
+          width="26"
+          height="26"
+        />
         <span class="brand-text">
           <span class="strike-wrong">떄</span>
           <span class="brand-tail">가 아니라</span>
@@ -129,6 +138,7 @@ const faqSchema = {
             ><span class="strike-wrong">떄</span> 라는 글자는</span
           ><br />
           <span class="hero-emph">없다.</span>
+          <span class="visually-hidden">— 맥 한글 오타 자동 교정 macOS 메뉴바 앱</span>
         </h1>
 
         <p class="hero-sub">
