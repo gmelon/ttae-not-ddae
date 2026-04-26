@@ -1,0 +1,405 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getDmgDownloadUrl } from "../../lib/version";
+
+const dmgUrl = getDmgDownloadUrl();
+
+const title =
+  "메신저에서 자주 나는 한글 오타 — 4가지 패턴별 원인과 해결법";
+const description =
+  "카카오톡, 슬랙, 노션에서 빠르게 한글을 칠 때 자주 발생하는 오타 4가지 — 떄·꺠 류, 한/영 전환 미스, 받침 누락, 자판 위치 실수 — 의 원인과 줄이는 방법을 정리했습니다.";
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  description,
+  inLanguage: "ko",
+  author: {
+    "@type": "Person",
+    name: "gmelon",
+    url: "https://github.com/gmelon",
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": "https://ttae.gmelon.dev/blog/messenger-korean-typos",
+  },
+};
+---
+
+<Layout title={title} description={description}>
+  <header class="nav">
+    <div class="container nav-row">
+      <a href="/" class="brand" aria-label="떄 가 아니라 때 홈">
+        <img
+          src="/logo_transparent.png"
+          alt="떄 가 아니라 때 — 맥 한글 오타 자동 교정"
+          width="26"
+          height="26"
+        />
+        <span class="brand-text">
+          <span class="strike-wrong">떄</span>
+          <span class="brand-tail">가 아니라</span>
+          <span class="right-glyph">때</span>
+        </span>
+      </a>
+      <a href="/" class="nav-back">← 홈</a>
+    </div>
+  </header>
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(articleSchema)}
+  />
+
+  <main class="article-main">
+    <article class="container article">
+      <h1 class="article-title">
+        메신저에서 자주 나는 한글 오타 — 4가지 패턴별 원인과 해결법
+      </h1>
+      <p class="article-lead">
+        카카오톡이나 슬랙으로 빠르게 한글을 입력하다 보면, 다시 읽어볼 때 오타가
+        종종 보이곤 합니다. 신기한 건 같은 사람이 같은 패턴의 오타를 반복적으로
+        만들어낸다는 점이에요. 사용 습관이라기보다 두벌식 자판 구조 자체에서
+        비롯되는 경우가 많거든요.
+      </p>
+      <p>
+        그래서 자주 보이는 한글 오타 패턴 네 가지를 정리해봤습니다. 각각이 왜
+        발생하는지, 어떻게 줄일 수 있는지 같이 봅니다.
+      </p>
+
+      <h2>1. 쌍자음 + 이중모음 오타 (떄·꺠·뺴·쨰)</h2>
+      <p>가장 흔하고, 가장 패턴이 정해져 있는 오타입니다.</p>
+      <pre class="seq">이떄까지 / 꺠어났어 / 빨리 뺴줘 / 진쨰?</pre>
+      <p>
+        10개의 음절(떄, 뗴, 꺠, 꼐, 뺴, 뼤, 썌, 쎼, 쨰, 쪠) 만 거의 일관되게
+        등장하는 게 특징이에요. 모두 쌍자음 + ㅒ/ㅖ 라는 동일한 구조라
+        그렇습니다.
+      </p>
+      <p>
+        원인은 두벌식 자판의 Shift 키 타이밍이에요. "때"를 치려면 Shift+ㄸ
+        다음에 Shift 를 떼고 ㅐ 를 입력해야 하는데, 빠르게 칠 때 두 번째 키까지
+        Shift 가 따라가버리면 ㅐ 가 ㅒ 로 들어가버려요. 자세한 메커니즘은 <a
+          href="/blog/why-ddae-typo">왜 떄·꺠가 자꾸 입력될까</a
+        > 글에서 다뤘습니다.
+      </p>
+      <p>
+        이 패턴은 의식해서 막기가 거의 불가능에 가깝지만, 다행히 글자 패턴이
+        정형화돼 있어서 정확히 이 10개만 잡아주는 <a href="/">자동 교정 도구</a
+        > 로 깔끔하게 해결할 수 있어요.
+      </p>
+
+      <h2>2. 한/영 전환 미스 (dkssudgktpdy → 안녕하세요)</h2>
+      <p>한국어 입력 모드인 줄 알고 영문 키를 그대로 친 결과입니다.</p>
+      <pre class="seq">dkssudgktpdy → 안녕하세요
+ㅎㄴㄴㅂ → hello</pre>
+      <p>
+        영문 → 한글 자동 변환을 해주는 별도 사이트가 일부 있긴 한데, 메신저
+        안에선 도움 받을 일이 거의 없어요. 결국 한/영 키 다시 누르고 다시 치는
+        수밖에 없습니다.
+      </p>
+      <p>
+        그나마 줄일 수 있는 방법은 macOS 메뉴바의 입력기 표시(한국어/ABC
+        라벨) 를 항상 보이게 두는 것 정도예요. 현재 모드를 시야 안에 두는
+        것만으로도 빈도가 꽤 줄어듭니다.
+      </p>
+
+      <h2>3. 받침 누락 (잘잤니 → 잘자니)</h2>
+      <p>
+        빠르게 칠 때 마지막 받침이 빠지거나, 다음 음절의 초성과 합쳐져 버리는
+        케이스입니다.
+      </p>
+      <pre class="seq">잘잤니 → 잘자니 (받침 ㅆ 누락)
+안녕하세요 → 안녀하세요</pre>
+      <p>
+        이건 자판 문제라기보다, 타자 속도가 한국어 음절 조합 속도를 앞질러서
+        생기는 오타예요. 한글은 초·중·종성이 모여야 음절 하나가 완성되는데,
+        종성이 들어오기 전에 다음 초성이 먼저 닿으면 종성이 떨어져 나갑니다.
+      </p>
+      <p>
+        의미를 알아야 잡을 수 있는 오타라 자동 교정으로는 어려워요. 결국 보내기
+        직전 한 번 눈으로 훑는 게 가장 확실합니다.
+      </p>
+
+      <h2>4. 인접 키 위치 실수 (ㅗ ↔ ㅓ, ㄱ ↔ ㄴ)</h2>
+      <p>손가락이 옆 키를 누르거나, 두 키를 동시에 누르는 실수입니다.</p>
+      <pre class="seq">잘햇어 / 죠아 / ㄴ래</pre>
+      <p>
+        특히 모음 ㅗ/ㅓ, ㅏ/ㅣ, ㅡ/ㅓ 가 자주 섞여요. 키캡 위치는 익숙한데
+        손가락 정렬이 흐트러진 순간에 일어납니다.
+      </p>
+      <p>
+        정확하게 누르는 것 외엔 별다른 방법이 없어요. 다만 빈도가 1·3번보다
+        낮은 편이라 부담은 크지 않습니다.
+      </p>
+
+      <h2>메신저별 특이사항</h2>
+      <p>주요 메신저들이 한글 오타를 어디까지 잡아주는지도 짚어두면:</p>
+      <ul>
+        <li>
+          카카오톡은 자체 자동 변환이 일부 있긴 한데 한글 음절 단위 교정은
+          거의 동작하지 않아요. 떄·꺠 류는 그대로 전송됩니다.
+        </li>
+        <li>
+          슬랙은 영문 자동 수정만 작동하고 한글은 그냥 무시. 코드블록·인용
+          안에서는 영문 자동 교정마저 꺼집니다.
+        </li>
+        <li>
+          노션은 영문 자동 변환 정도만 일부 동작. 한글 오타는 손으로 잡는
+          수밖에 없어요.
+        </li>
+      </ul>
+      <p>
+        결국 어떤 메신저를 쓰든, 한글 오타는 운영체제 단에서 잡지 않으면 메신저
+        자체로는 해결이 안 됩니다.
+      </p>
+
+      <h2>정리</h2>
+      <ul>
+        <li>
+          메신저 한글 오타는 크게 <strong
+            >쌍자음+이중모음 / 한영 전환 / 받침 누락 / 인접 키 실수</strong
+          > 네 가지 패턴으로 정리됩니다.
+        </li>
+        <li>
+          이 중 1번(떄·꺠 류) 은 패턴이 정형화돼 있고 한국어에서 거의 쓰이지
+          않는 글자라, <strong>운영체제 단에서 자동 교정이 가능한 유일한 패턴</strong
+          >입니다.
+        </li>
+        <li>
+          나머지 3가지는 사용자가 의식해서 줄이거나, 보내기 전 검수하는
+          수밖에 없습니다.
+        </li>
+      </ul>
+
+      <div class="cta-box">
+        <p class="cta-text">
+          <strong>떄 가 아니라 때</strong> 는 1번 패턴(쌍자음 + 이중모음 10개)
+          만 정확히 자동 교정하는 macOS 메뉴바 앱입니다. 떄·꺠·뺴 같은 글자가
+          다시는 메시지에 등장하지 않게 하고 싶다면 한 번 써보세요.
+        </p>
+        <div class="cta-actions">
+          <a href={dmgUrl} class="btn btn-primary">다운로드</a>
+          <a href="/" class="btn btn-ghost">자세히 보기</a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="strike-wrong">떄</span>
+        <span class="brand-tail">가 아니라</span>
+        <span class="right-glyph">때</span>
+      </div>
+      <div class="footer-links">
+        <a href="/">홈</a>
+        <a href="/blog/why-ddae-typo">왜 떄·꺠가 자꾸 입력될까</a>
+        <a href="https://github.com/gmelon/ttae-not-ddae" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <div class="footer-meta">© 2026 떄가아니라때 contributors</div>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: saturate(140%) blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+  }
+  .brand-text {
+    font-size: 15px;
+    letter-spacing: -0.01em;
+  }
+  .brand-tail {
+    color: var(--text-dim);
+    margin: 0 4px;
+    font-weight: 500;
+  }
+  .nav-back {
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+  .nav-back:hover {
+    color: var(--text);
+  }
+
+  .article-main {
+    padding: 56px 0 80px;
+  }
+  .article {
+    max-width: 720px;
+  }
+
+  .article-title {
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.25;
+    letter-spacing: -0.022em;
+    margin-bottom: 24px;
+  }
+
+  .article-lead {
+    font-size: 17.5px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+    line-height: 1.7;
+  }
+
+  .article :global(h2) {
+    font-size: 22px;
+    line-height: 1.3;
+    margin: 44px 0 14px;
+    letter-spacing: -0.018em;
+  }
+
+  .article :global(p) {
+    margin: 0 0 16px;
+    line-height: 1.75;
+  }
+
+  .article :global(ul) {
+    margin: 0 0 16px;
+    padding-left: 22px;
+  }
+  .article :global(li) {
+    margin-bottom: 8px;
+    line-height: 1.7;
+  }
+
+  .article :global(a:not(.btn)) {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.2px;
+  }
+  .article :global(a:not(.btn):hover) {
+    color: var(--accent-hover);
+  }
+
+  .article :global(strong) {
+    font-weight: 600;
+  }
+
+  .seq {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    margin: 0 0 18px;
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 14px;
+    color: var(--text);
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
+
+  .cta-box {
+    margin-top: 48px;
+    padding: 28px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .cta-text {
+    margin-bottom: 18px !important;
+    font-size: 16px;
+  }
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 14.5px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none !important;
+  }
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    color: #fff !important;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border-strong);
+    text-decoration: none !important;
+  }
+  .btn-ghost:hover {
+    background: var(--bg-elev-2);
+    color: var(--text) !important;
+  }
+
+  .footer {
+    border-top: 1px solid var(--border);
+    background: var(--bg-elev);
+    padding: 32px 0;
+  }
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .footer-brand {
+    font-weight: 600;
+  }
+  .footer-links {
+    display: flex;
+    gap: 18px;
+    color: var(--text-muted);
+    font-size: 14px;
+    flex-wrap: wrap;
+  }
+  .footer-links a:hover {
+    color: var(--text);
+  }
+  .footer-meta {
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  @media (max-width: 640px) {
+    .article-main {
+      padding: 32px 0 60px;
+    }
+    .article-lead {
+      font-size: 16.5px;
+    }
+    .article :global(h2) {
+      font-size: 20px;
+      margin: 36px 0 12px;
+    }
+  }
+</style>
